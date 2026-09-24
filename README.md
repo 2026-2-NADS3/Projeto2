@@ -3,14 +3,14 @@
 <p align="center">
   <img src="Imagens/FecapLogo.png" alt="Próxima Etapa" border="0" width="300">
   
-- Julia Gomes Basilio, Luis Felipe Trindade, Maria Eduarda Barberino Olo, Davi Lourenço Bigotto
+## Integrantes: <a href="https://github.com/JuliaBasilio16">Julia Basilio</a>, <a href="https://github.com/MariaEduardaOlo">Maria Eduarda Olo</a>, <a href="https://github.com/luistrindade2510">Luis Felipe</a>, <a href="https://github.com/DaviBigotto">Davi Bigotto</a>
 
-## Professores Orientadores
+**## Professores Orientadores
 
 - Rodrigo Rosa
 - Jefferson de Oliveira
 - Aimar Martins
-- Francisco Escobar
+- Francisco Escobar**
 
 ---
 
