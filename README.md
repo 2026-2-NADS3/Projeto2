@@ -100,9 +100,3 @@ Este projeto foi desenvolvido exclusivamente para fins acadêmicos na Fundação
 O uso, modificação e distribuição deste projeto devem respeitar os direitos dos autores e da instituição.
 
 ---
-
-## 🎓 Referências
-
----
-
-### 🔧 Referências Técnicas
