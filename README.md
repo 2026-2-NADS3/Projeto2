@@ -5,7 +5,7 @@
   
 ## Integrantes: <a href="https://github.com/JuliaBasilio16">Julia Basilio</a>, <a href="https://github.com/MariaEduardaOlo">Maria Eduarda Olo</a>, <a href="https://github.com/luistrindade2510">Luis Felipe</a>, <a href="https://github.com/DaviBigotto">Davi Bigotto</a>
 
-## Professores Orientadores: Rodrigo Rosa, Jefferson de Oliveira, Aimar Martins, Francisco Escobar**
+## Professores Orientadores: Rodrigo Rosa, Jefferson de Oliveira, Aimar Martins, Francisco Escobar
 
 ---
 
