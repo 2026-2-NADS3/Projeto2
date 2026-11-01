@@ -4,7 +4,6 @@ const { Pool } = require('pg');
 const app = express();
 app.use(express.json());
 
-// Configuração vem de variáveis de ambiente (nada de senha no código)
 const pool = new Pool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -37,7 +36,6 @@ app.post('/cursos', async (req, res) => {
     return res.status(400).json({ erro: 'nome e carga_horaria (inteiro > 0) são obrigatórios' });
   }
   try {
-    // Consulta parametrizada (evita SQL Injection)
     const result = await pool.query(
       'INSERT INTO cursos (nome, local, carga_horaria) VALUES ($1, $2, $3) RETURNING *',
       [nome, local, carga_horaria]
