@@ -217,9 +217,6 @@ curl http://localhost:3000/cursos
 | `PGADMIN_EMAIL` | E-mail de login do pgAdmin |
 | `PGADMIN_PASSWORD` | Senha de login do pgAdmin |
 
-O `.env` real não é enviado ao GitHub (`.gitignore`). Use o `.env.example` como modelo.
-
-![Repositório no GitHub](docs/print14.png)
 
 ## 11. LGPD e segurança
 
