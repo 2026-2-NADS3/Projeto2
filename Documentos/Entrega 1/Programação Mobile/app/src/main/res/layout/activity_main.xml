@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8FAFC"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cabecalho"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="12dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardAvatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:cardCornerRadius="24dp"
+            app:cardBackgroundColor="#8B5CF6"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/txtInicialAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="JS"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/txtOlaUsuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Olá, João Silva 👋"
+            android:textColor="#64748B"
+            android:textSize="13sp"
+            android:layout_marginStart="12dp"
+            app:layout_constraintStart_toEndOf="@id/cardAvatar"
+            app:layout_constraintTop_toTopOf="@id/cardAvatar" />
+
+        <TextView
+            android:id="@+id/txtTituloJornada"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sua Jornada"
+            android:textColor="#0F172A"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginStart="12dp"
+            app:layout_constraintStart_toEndOf="@id/cardAvatar"
+            app:layout_constraintTop_toBottomOf="@id/txtOlaUsuario" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rodape"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_rodape"
+        android:elevation="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/btnInicio"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="Home"
+            android:textSize="11sp"
+            android:textColor="#22C55E"
+            android:textStyle="bold"
+            android:background="@drawable/bg_btn_flat"
+            app:backgroundTint="@null"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnCursos"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <Button
+            android:id="@+id/btnCursos"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="Cursos"
+            android:textSize="11sp"
+            android:textColor="#94A3B8"
+            android:background="@drawable/bg_btn_flat"
+            app:backgroundTint="@null"
+            app:layout_constraintStart_toEndOf="@id/btnInicio"
+            app:layout_constraintEnd_toStartOf="@id/btnAgenda"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <Button
+            android:id="@+id/btnAgenda"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="Agenda"
+            android:textSize="11sp"
+            android:textColor="#94A3B8"
+            android:background="@drawable/bg_btn_flat"
+            app:backgroundTint="@null"
+            app:layout_constraintStart_toEndOf="@id/btnCursos"
+            app:layout_constraintEnd_toStartOf="@id/btnPerfil"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <Button
+            android:id="@+id/btnPerfil"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="Perfil"
+            android:textSize="11sp"
+            android:textColor="#94A3B8"
+            android:background="@drawable/bg_btn_flat"
+            app:backgroundTint="@null"
+            app:layout_constraintStart_toEndOf="@id/btnAgenda"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <Button
+            android:id="@+id/btnCertificados"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:id="@+id/scrollConteudo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/cabecalho"
+        app:layout_constraintBottom_toTopOf="@id/rodape"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/conteudo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="24dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cardTrilha"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_trilha"
+                android:padding="20dp"
+                android:elevation="4dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/txtTagTrilha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TRILHA EM ANDAMENTO"
+                    android:textColor="#DCFCE7"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtNomeTrilha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tecnologia &amp; Inovação"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="6dp"
+                    app:layout_constraintTop_toBottomOf="@id/txtTagTrilha"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtProximaAula"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Próxima aula: Quinta-feira às 14h"
+                    android:textColor="#E2E8F0"
+                    android:textSize="12sp"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintTop_toBottomOf="@id/txtNomeTrilha"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <ProgressBar
+                    android:id="@+id/progressTrilha"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="8dp"
+                    android:max="100"
+                    android:progress="65"
+                    android:progressDrawable="@android:drawable/progress_horizontal"
+                    android:progressTint="#FFFFFF"
+                    android:progressBackgroundTint="#4DFFFFFF"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="12dp"
+                    app:layout_constraintTop_toBottomOf="@id/txtProximaAula"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/txtPorcentagemTrilha" />
+
+                <TextView
+                    android:id="@+id/txtPorcentagemTrilha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="65%"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="@id/progressTrilha"
+                    app:layout_constraintBottom_toBottomOf="@id/progressTrilha"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/txtSecaoAcessoRapido"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Acesso Rápido"
+                android:textColor="#0F172A"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginTop="24dp"
+                app:layout_constraintTop_toBottomOf="@id/cardTrilha"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cardQrPresenca"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_card_white"
+                android:padding="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintTop_toBottomOf="@id/txtSecaoAcessoRapido"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/cardMeuCard">
+
+                <View
+                    android:id="@+id/iconQrBg"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_icon_qr"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtQrPresenca"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="QR Presença"
+                    android:textColor="#0F172A"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/iconQrBg"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cardMeuCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_card_white"
+                android:padding="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintTop_toBottomOf="@id/txtSecaoAcessoRapido"
+                app:layout_constraintStart_toEndOf="@id/cardQrPresenca"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <View
+                    android:id="@+id/iconCardBg"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_icon_card"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtMeuCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Meu Card"
+                    android:textColor="#0F172A"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/iconCardBg"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/txtSecaoAgendaDestaque"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Agenda Destaque"
+                android:textColor="#0F172A"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginTop="24dp"
+                app:layout_constraintTop_toBottomOf="@id/cardQrPresenca"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cardAgendaDestaque"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_card_white"
+                android:padding="12dp"
+                app:layout_constraintTop_toBottomOf="@id/txtSecaoAgendaDestaque"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/boxBadgeData"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_badge_date"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <TextView
+                        android:id="@+id/txtMesBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="NOV"
+                        android:textColor="#D97706"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/txtDiaBadge"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <TextView
+                        android:id="@+id/txtDiaBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12"
+                        android:textColor="#D97706"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@id/txtMesBadge"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/txtTituloEvento"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Visita Técnica FECAP"
+                    android:textColor="#0F172A"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="12dp"
+                    app:layout_constraintTop_toTopOf="@id/boxBadgeData"
+                    app:layout_constraintStart_toEndOf="@id/boxBadgeData"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtDetalhesEvento"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Campus Liberdade • 14:00"
+                    android:textColor="#64748B"
+                    android:textSize="12sp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="2dp"
+                    app:layout_constraintTop_toBottomOf="@id/txtTituloEvento"
+                    app:layout_constraintStart_toEndOf="@id/boxBadgeData"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8FAFC"
+    tools:context=".CursosActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cabecalho"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="12dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/txtTituloCursos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cursos &amp; Formação"
+            android:textColor="#0F172A"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <EditText
+        android:id="@+id/edtBuscarCursos"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:hint="Buscar cursos, palestras..."
+        android:textColorHint="#94A3B8"
+        android:textColor="#0F172A"
+        android:textSize="13sp"
+        android:background="@drawable/bg_input_field"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="@id/cabecalho"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rodape"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_rodape"
+        android:elevation="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/btnInicio"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="Home"
+            android:textSize="11sp"
+            android:textColor="#94A3B8"
+            android:background="@drawable/bg_btn_flat"
+            app:backgroundTint="@null"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnCursos"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <Button
+            android:id="@+id/btnCursos"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="Cursos"
+            android:textSize="11sp"
+            android:textColor="#22C55E"
+            android:textStyle="bold"
+            android:background="@drawable/bg_btn_flat"
+            app:backgroundTint="@null"
+            app:layout_constraintStart_toEndOf="@id/btnInicio"
+            app:layout_constraintEnd_toStartOf="@id/btnAgenda"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <Button
+            android:id="@+id/btnAgenda"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="Agenda"
+            android:textSize="11sp"
+            android:textColor="#94A3B8"
+            android:background="@drawable/bg_btn_flat"
+            app:backgroundTint="@null"
+            app:layout_constraintStart_toEndOf="@id/btnCursos"
+            app:layout_constraintEnd_toStartOf="@id/btnPerfil"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <Button
+            android:id="@+id/btnPerfil"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="Perfil"
+            android:textSize="11sp"
+            android:textColor="#94A3B8"
+            android:background="@drawable/bg_btn_flat"
+            app:backgroundTint="@null"
+            app:layout_constraintStart_toEndOf="@id/btnAgenda"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <Button
+            android:id="@+id/btnCertificados"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:id="@+id/scrollConteudo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/edtBuscarCursos"
+        app:layout_constraintBottom_toTopOf="@id/rodape"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/conteudo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="24dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cardCurso1"
+                android:layout_width="0dp"
+                android:layout_height="230dp"
+                android:background="@drawable/bg_card_white"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bannerCurso1"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@drawable/bg_banner_purple"
+                    android:padding="20dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <TextView
+                        android:id="@+id/txtTagCurso1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PROGRAMA PORTAS ABERTAS"
+                        android:textColor="#DDD6FE"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/txtNomeCurso1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Introdução à Programação"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="6dp"
+                        app:layout_constraintTop_toBottomOf="@id/txtTagCurso1"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/txtDescCurso1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Aprenda lógica de programação e crie seus primeiros projetos com facilidade."
+                    android:textColor="#64748B"
+                    android:textSize="12sp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/bannerCurso1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/tagHoras1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="28dp"
+                    android:gravity="center"
+                    android:text="40 Horas"
+                    android:textColor="#475569"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_tag_hours"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <Button
+                    android:id="@+id/btnInscrever1"
+                    android:layout_width="110dp"
+                    android:layout_height="38dp"
+                    android:text="Inscrever-se"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_btn_green"
+                    app:backgroundTint="@null"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cardCurso2"
+                android:layout_width="0dp"
+                android:layout_height="180dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_card_white"
+                app:layout_constraintTop_toBottomOf="@id/cardCurso1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bannerCurso2"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:background="@drawable/bg_banner_blue"
+                    android:padding="16dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <TextView
+                        android:id="@+id/txtTagCurso2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="WORKSHOP"
+                        android:textColor="#DBEAFE"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/txtNomeCurso2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Orientação Vocacional e ENEM"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintTop_toBottomOf="@id/txtTagCurso2"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/txtDescCurso2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Como escolher sua carreira e obter bolsas ProUni/FIES."
+                    android:textColor="#64748B"
+                    android:textSize="12sp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="12dp"
+                    app:layout_constraintTop_toBottomOf="@id/bannerCurso2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtStatusInscrito"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:gravity="center"
+                    android:text="Inscrito - Início dia 20/NOV"
+                    android:textColor="#D97706"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_banner_yellow"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
