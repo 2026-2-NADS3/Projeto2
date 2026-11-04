@@ -67,9 +67,10 @@ public class QrPresencaActivity extends AppCompatActivity {
 
     public void abrirCameraScanner() {
         IntentIntegrator integrator = new IntentIntegrator(QrPresencaActivity.this);
+        integrator.setCaptureActivity(CaptureActivityPortrait.class);
+        integrator.setOrientationLocked(true);
         integrator.setPrompt("Aponte a câmera para o QR Code da aula");
         integrator.setBeepEnabled(true);
-        integrator.setOrientationLocked(false);
         integrator.initiateScan();
     }
 

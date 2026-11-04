@@ -44,6 +44,11 @@
             android:name=".QrPresencaActivity"
             android:exported="false" />
         <activity
+            android:name=".CaptureActivityPortrait"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            tools:replace="android:screenOrientation" />
+        <activity
             android:name=".CarteiraActivity"
             android:exported="false" />
         <activity
