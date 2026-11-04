@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "ProximaEtapa.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -62,29 +62,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private void populaDadosIniciais(SQLiteDatabase db) {
         ContentValues c1 = new ContentValues();
-        c1.put("titulo", "Introdução à Programação");
-        c1.put("descricao", "Aprenda lógica de programação e crie seus primeiros projetos.");
-        c1.put("categoria", "PROGRAMA PORTAS ABERTAS");
+        c1.put("titulo", "Orientação Vocacional & Carreira");
+        c1.put("descricao", "Descubra seus pontos fortes, afinidades e planeje seus próximos passos.");
+        c1.put("categoria", "MÓDULO 1");
         c1.put("duracao", "40 Horas");
-        c1.put("status", "Disponível");
+        c1.put("status", "Concluído");
         db.insert("cursos", null, c1);
 
         ContentValues c2 = new ContentValues();
-        c2.put("titulo", "Orientação Vocacional e ENEM");
-        c2.put("descricao", "Como escolher sua carreira e obter bolsas ProUni/FIES.");
-        c2.put("categoria", "WORKSHOP");
-        c2.put("duracao", "12 Horas");
-        c2.put("status", "Inscrito");
+        c2.put("titulo", "Comunicação Assertiva & Oratória");
+        c2.put("descricao", "Técnicas de oratória, expressão verbal, postura e apresentações em público.");
+        c2.put("categoria", "MÓDULO 2");
+        c2.put("duracao", "30 Horas");
+        c2.put("status", "Em Andamento");
         db.insert("cursos", null, c2);
 
+        ContentValues c3 = new ContentValues();
+        c3.put("titulo", "Preparatório ENEM, ProUni & FIES");
+        c3.put("descricao", "Estratégias de prova, redação nota 1000 e como obter bolsas na faculdade.");
+        c3.put("categoria", "WORKSHOP");
+        c3.put("duracao", "50 Horas");
+        c3.put("status", "Inscrito");
+        db.insert("cursos", null, c3);
+
+        ContentValues c4 = new ContentValues();
+        c4.put("titulo", "Liderança & Trabalho em Equipe");
+        c4.put("descricao", "Desenvolva inteligência emocional, liderança empática e gestão de conflitos.");
+        c4.put("categoria", "MÓDULO 4");
+        c4.put("duracao", "25 Horas");
+        c4.put("status", "Disponível");
+        db.insert("cursos", null, c4);
+
         ContentValues cert1 = new ContentValues();
-        cert1.put("titulo", "Lógica de Programação");
+        cert1.put("titulo", "Orientação Vocacional & Carreira");
         cert1.put("data", "15 Out 2026");
         cert1.put("horas", "40h");
         db.insert("certificados", null, cert1);
 
         ContentValues cert2 = new ContentValues();
-        cert2.put("titulo", "Workshop de Orientação");
+        cert2.put("titulo", "Workshop de Oratória e Comunicação");
         cert2.put("data", "02 Set 2026");
         cert2.put("horas", "12h");
         db.insert("certificados", null, cert2);
