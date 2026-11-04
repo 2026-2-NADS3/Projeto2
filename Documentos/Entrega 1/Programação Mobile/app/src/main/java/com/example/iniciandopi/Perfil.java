@@ -14,7 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class Perfil extends AppCompatActivity {
 
     public Button btnInicio, btnCursos, btnAgenda, btnCertificados, btnPerfil;
-    public Button btnMenuCarteira, btnMenuCertificados, btnMenuTeste, btnMenuComunicados, btnMenuChat, btnMenuSair;
+    public Button btnMenuCarteira, btnMenuFrequencia, btnMenuCertificados, btnMenuTeste, btnMenuComunicados, btnMenuChat, btnMenuSair;
     public TextView txtNomePerfil, txtSubPerfil, txtInicialPerfil;
     private DatabaseHelper dbHelper;
 
@@ -39,6 +39,7 @@ public class Perfil extends AppCompatActivity {
         btnPerfil = findViewById(R.id.btnPerfil);
 
         btnMenuCarteira = findViewById(R.id.btnMenuCarteira);
+        btnMenuFrequencia = findViewById(R.id.btnMenuFrequencia);
         btnMenuCertificados = findViewById(R.id.btnMenuCertificados);
         btnMenuTeste = findViewById(R.id.btnMenuTeste);
         btnMenuComunicados = findViewById(R.id.btnMenuComunicados);
@@ -81,6 +82,14 @@ public class Perfil extends AppCompatActivity {
         if (btnMenuCarteira != null) {
             btnMenuCarteira.setOnClickListener(v -> {
                 Intent intent = new Intent(Perfil.this, CarteiraActivity.class);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+            });
+        }
+
+        if (btnMenuFrequencia != null) {
+            btnMenuFrequencia.setOnClickListener(v -> {
+                Intent intent = new Intent(Perfil.this, FrequenciaActivity.class);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
             });

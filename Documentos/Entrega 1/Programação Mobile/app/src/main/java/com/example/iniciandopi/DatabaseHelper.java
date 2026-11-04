@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "ProximaEtapa.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -104,6 +104,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cert2.put("data", "02 Set 2026");
         cert2.put("horas", "12h");
         db.insert("certificados", null, cert2);
+
+        ContentValues p1 = new ContentValues();
+        p1.put("aula", "Aula 03: Comunicação Assertiva");
+        p1.put("data", "28/10/2026 às 14:00");
+        p1.put("sincronizado", 1);
+        db.insert("presencas", null, p1);
+
+        ContentValues p2 = new ContentValues();
+        p2.put("aula", "Aula 02: Fundamentos de Oratória");
+        p2.put("data", "21/10/2026 às 14:00");
+        p2.put("sincronizado", 1);
+        db.insert("presencas", null, p2);
+
+        ContentValues p3 = new ContentValues();
+        p3.put("aula", "Aula 01: Introdução ao Módulo 2");
+        p3.put("data", "14/10/2026 às 14:00");
+        p3.put("sincronizado", 1);
+        db.insert("presencas", null, p3);
     }
 
     @Override
@@ -164,6 +182,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor obterCertificadosLocais() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM certificados", null);
+    }
+
+    public Cursor obterPresencas() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM presencas ORDER BY id DESC", null);
     }
 
     public void limparSessao() {
