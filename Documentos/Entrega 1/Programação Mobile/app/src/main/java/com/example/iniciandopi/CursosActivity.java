@@ -2,6 +2,7 @@ package com.example.iniciandopi;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,8 +14,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class CursosActivity extends AppCompatActivity {
 
-    public Button btnInicio, btnCursos, btnAgenda, btnPerfil, btnInscrever1;
+    public Button btnInicio, btnCursos, btnAgenda, btnPerfil;
+    public Button btnFiltroTodos, btnFiltroInscritos, btnInscreverCurso4;
+    public View cardCurso1, cardCurso2, cardCurso3, cardCurso4, cardCurso5, cardCurso6;
     public EditText edtBuscarCursos;
+    private DatabaseHelper dbHelper;
+    private boolean inscritoCurso4 = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +33,37 @@ public class CursosActivity extends AppCompatActivity {
             return insets;
         });
 
+        dbHelper = new DatabaseHelper(this);
+
         btnInicio = findViewById(R.id.btnInicio);
         btnCursos = findViewById(R.id.btnCursos);
         btnAgenda = findViewById(R.id.btnAgenda);
         btnPerfil = findViewById(R.id.btnPerfil);
-        btnInscrever1 = findViewById(R.id.btnInscrever1);
+
+        btnFiltroTodos = findViewById(R.id.btnFiltroTodos);
+        btnFiltroInscritos = findViewById(R.id.btnFiltroInscritos);
+        btnInscreverCurso4 = findViewById(R.id.btnInscreverCurso4);
+
+        cardCurso1 = findViewById(R.id.cardCurso1);
+        cardCurso2 = findViewById(R.id.cardCurso2);
+        cardCurso3 = findViewById(R.id.cardCurso3);
+        cardCurso4 = findViewById(R.id.cardCurso4);
+        cardCurso5 = findViewById(R.id.cardCurso5);
+        cardCurso6 = findViewById(R.id.cardCurso6);
+
         edtBuscarCursos = findViewById(R.id.edtBuscarCursos);
+
+        if (btnFiltroTodos != null) {
+            btnFiltroTodos.setOnClickListener(v -> filtrarCursos(false));
+        }
+
+        if (btnFiltroInscritos != null) {
+            btnFiltroInscritos.setOnClickListener(v -> filtrarCursos(true));
+        }
+
+        if (btnInscreverCurso4 != null) {
+            btnInscreverCurso4.setOnClickListener(v -> realizarInscricaoCurso4());
+        }
 
         if (btnInicio != null) {
             btnInicio.setOnClickListener(v -> {
@@ -61,11 +91,46 @@ public class CursosActivity extends AppCompatActivity {
                 finish();
             });
         }
+    }
 
-        if (btnInscrever1 != null) {
-            btnInscrever1.setOnClickListener(v -> {
-                Toast.makeText(CursosActivity.this, "Inscrição realizada com sucesso!", Toast.LENGTH_SHORT).show();
-            });
+    private void realizarInscricaoCurso4() {
+        inscritoCurso4 = true;
+
+        if (btnInscreverCurso4 != null) {
+            btnInscreverCurso4.setText("Inscrito • Aulas iniciam em breve");
+            btnInscreverCurso4.setBackgroundResource(R.drawable.bg_banner_yellow);
+            btnInscreverCurso4.setTextColor(0xFFD97706);
+            btnInscreverCurso4.setEnabled(false);
+        }
+
+        Toast.makeText(this, "Inscrição realizada com sucesso! Módulo 4 ativado na sua trilha.", Toast.LENGTH_LONG).show();
+    }
+
+    private void filtrarCursos(boolean apenasInscritos) {
+        if (btnFiltroTodos != null) {
+            btnFiltroTodos.setBackgroundResource(apenasInscritos ? R.drawable.bg_option_unselected : R.drawable.bg_btn_green);
+            btnFiltroTodos.setTextColor(apenasInscritos ? 0xFF334155 : 0xFFFFFFFF);
+        }
+
+        if (btnFiltroInscritos != null) {
+            btnFiltroInscritos.setBackgroundResource(apenasInscritos ? R.drawable.bg_btn_green : R.drawable.bg_option_unselected);
+            btnFiltroInscritos.setTextColor(apenasInscritos ? 0xFFFFFFFF : 0xFF334155);
+        }
+
+        if (apenasInscritos) {
+            if (cardCurso1 != null) cardCurso1.setVisibility(View.VISIBLE);
+            if (cardCurso2 != null) cardCurso2.setVisibility(View.VISIBLE);
+            if (cardCurso3 != null) cardCurso3.setVisibility(View.VISIBLE);
+            if (cardCurso4 != null) cardCurso4.setVisibility(inscritoCurso4 ? View.VISIBLE : View.GONE);
+            if (cardCurso5 != null) cardCurso5.setVisibility(View.GONE);
+            if (cardCurso6 != null) cardCurso6.setVisibility(View.GONE);
+        } else {
+            if (cardCurso1 != null) cardCurso1.setVisibility(View.VISIBLE);
+            if (cardCurso2 != null) cardCurso2.setVisibility(View.VISIBLE);
+            if (cardCurso3 != null) cardCurso3.setVisibility(View.VISIBLE);
+            if (cardCurso4 != null) cardCurso4.setVisibility(View.VISIBLE);
+            if (cardCurso5 != null) cardCurso5.setVisibility(View.VISIBLE);
+            if (cardCurso6 != null) cardCurso6.setVisibility(View.VISIBLE);
         }
     }
 }
