@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 String nome = cursor.getString(indexNome);
                 if (nome != null && !nome.isEmpty()) {
                     if (txtOlaUsuario != null) {
-                        txtOlaUsuario.setText("Olá, " + nome + " 👋");
+                        txtOlaUsuario.setText("Olá, " + nome);
                     }
 
                     if (txtInicialAvatar != null) {

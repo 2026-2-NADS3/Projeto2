@@ -192,7 +192,7 @@
             android:paddingEnd="24dp"
             android:paddingBottom="24dp">
 
-            <!-- Módulo 1 (Concluído ✅) -->
+            <!-- Módulo 1 (Concluído) -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cardCurso1"
                 android:layout_width="match_parent"
@@ -212,7 +212,7 @@
                         android:id="@+id/txtTagCurso1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="MÓDULO 1 • CONCLUÍDO ✅"
+                        android:text="MÓDULO 1 • CONCLUÍDO"
                         android:textColor="#DDD6FE"
                         android:textSize="11sp"
                         android:textStyle="bold"
@@ -266,7 +266,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Módulo 2 (Inscrito / Em Andamento 🟢) -->
+            <!-- Módulo 2 (Inscrito / Em Andamento) -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cardCurso2"
                 android:layout_width="match_parent"
@@ -286,7 +286,7 @@
                         android:id="@+id/txtTagCurso2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="MÓDULO 2 • TRILHA ATIVA 🟢"
+                        android:text="MÓDULO 2 • TRILHA ATIVA"
                         android:textColor="#DDD6FE"
                         android:textSize="11sp"
                         android:textStyle="bold"
@@ -340,7 +340,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Módulo 3 (Workshop / Inscrito 🟡) -->
+            <!-- Módulo 3 (Workshop / Inscrito) -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cardCurso3"
                 android:layout_width="match_parent"
@@ -414,7 +414,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Módulo 4 (Disponível com Botão "Inscrever-se" 🟡) -->
+            <!-- Módulo 4 (Disponível com Botão "Inscrever-se") -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cardCurso4"
                 android:layout_width="match_parent"
@@ -488,7 +488,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Módulo 5 (Bloqueado / Apagado na Trilha 🔒) -->
+            <!-- Módulo 5 (Bloqueado / Apagado na Trilha) -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cardCurso5"
                 android:layout_width="match_parent"
@@ -509,7 +509,7 @@
                         android:id="@+id/txtTagCurso5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="MÓDULO 5 • TRILHA BLOQUEADA 🔒"
+                        android:text="MÓDULO 5 • TRILHA BLOQUEADA"
                         android:textColor="#94A3B8"
                         android:textSize="11sp"
                         android:textStyle="bold"
@@ -549,7 +549,7 @@
                     android:layout_width="0dp"
                     android:layout_height="36dp"
                     android:gravity="center"
-                    android:text="🔒 Requer conclusão do Módulo 4"
+                    android:text="Requer conclusão do Módulo 4"
                     android:textColor="#64748B"
                     android:textSize="12sp"
                     android:textStyle="bold"
@@ -563,7 +563,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Módulo 6 (Bloqueado / Apagado na Trilha 🔒) -->
+            <!-- Módulo 6 (Bloqueado / Apagado na Trilha) -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cardCurso6"
                 android:layout_width="match_parent"
@@ -584,7 +584,7 @@
                         android:id="@+id/txtTagCurso6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="MÓDULO 6 • TRILHA BLOQUEADA 🔒"
+                        android:text="MÓDULO 6 • TRILHA BLOQUEADA"
                         android:textColor="#94A3B8"
                         android:textSize="11sp"
                         android:textStyle="bold"
@@ -624,7 +624,7 @@
                     android:layout_width="0dp"
                     android:layout_height="36dp"
                     android:gravity="center"
-                    android:text="🔒 Requer conclusão do Módulo 5"
+                    android:text="Requer conclusão do Módulo 5"
                     android:textColor="#64748B"
                     android:textSize="12sp"
                     android:textStyle="bold"

@@ -207,7 +207,7 @@
             android:id="@+id/txtCursosRecomendadosTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="🎓 Cursos Recomendados para Você:"
+            android:text="Cursos Recomendados para Você:"
             android:textColor="#0F172A"
             android:textSize="13sp"
             android:textStyle="bold"
