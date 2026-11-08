@@ -68,6 +68,39 @@
             app:layout_constraintStart_toEndOf="@id/cardAvatar"
             app:layout_constraintTop_toBottomOf="@id/txtOlaUsuario" />
 
+        <Button
+            android:id="@+id/btnNotificacoes"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:text="🔔"
+            android:textAllCaps="false"
+            android:textSize="22sp"
+            android:contentDescription="Comunicados e notificações"
+            android:padding="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:background="@drawable/bg_btn_flat"
+            app:backgroundTint="@null"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/txtBadgeNotificacoes"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_badge_red"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="@id/btnNotificacoes"
+            app:layout_constraintEnd_toEndOf="@id/btnNotificacoes" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

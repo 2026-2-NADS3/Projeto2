@@ -17,9 +17,9 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    public Button btnInicio, btnCursos, btnAgenda, btnCertificados, btnPerfil;
+    public Button btnInicio, btnCursos, btnAgenda, btnCertificados, btnPerfil, btnNotificacoes;
     public View cardQrPresenca, cardMeuCard;
-    public TextView txtOlaUsuario, txtInicialAvatar, txtMesBadge, txtDiaBadge;
+    public TextView txtOlaUsuario, txtInicialAvatar, txtMesBadge, txtDiaBadge, txtBadgeNotificacoes;
     private DatabaseHelper dbHelper;
 
     @Override
@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         btnAgenda = findViewById(R.id.btnAgenda);
         btnCertificados = findViewById(R.id.btnCertificados);
         btnPerfil = findViewById(R.id.btnPerfil);
+        btnNotificacoes = findViewById(R.id.btnNotificacoes);
 
         cardQrPresenca = findViewById(R.id.cardQrPresenca);
         cardMeuCard = findViewById(R.id.cardMeuCard);
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         txtInicialAvatar = findViewById(R.id.txtInicialAvatar);
         txtMesBadge = findViewById(R.id.txtMesBadge);
         txtDiaBadge = findViewById(R.id.txtDiaBadge);
+        txtBadgeNotificacoes = findViewById(R.id.txtBadgeNotificacoes);
 
         carregarDadosAluno();
         carregarDataAgendaDestaque();
@@ -73,12 +75,35 @@ public class MainActivity extends AppCompatActivity {
             btnPerfil.setOnClickListener(v -> irParaPerfil());
         }
 
+        if (btnNotificacoes != null) {
+            btnNotificacoes.setOnClickListener(v -> irParaComunicados());
+        }
+
         if (cardQrPresenca != null) {
             cardQrPresenca.setOnClickListener(v -> irParaQrPresenca());
         }
 
         if (cardMeuCard != null) {
             cardMeuCard.setOnClickListener(v -> irParaMeuCard());
+        }
+    }
+
+    // Toda vez que a Home volta para a frente, recalcula o número do sino
+    @Override
+    protected void onResume() {
+        super.onResume();
+        atualizarBadgeNotificacoes();
+    }
+
+    private void atualizarBadgeNotificacoes() {
+        if (txtBadgeNotificacoes == null) return;
+
+        int naoLidos = ComunicadosActivity.contarNaoLidos(this);
+        if (naoLidos > 0) {
+            txtBadgeNotificacoes.setText(naoLidos > 9 ? "9+" : String.valueOf(naoLidos));
+            txtBadgeNotificacoes.setVisibility(View.VISIBLE);
+        } else {
+            txtBadgeNotificacoes.setVisibility(View.GONE);
         }
     }
 
@@ -151,6 +176,12 @@ public class MainActivity extends AppCompatActivity {
     public void irParaPerfil() {
         Intent perfil = new Intent(MainActivity.this, Perfil.class);
         startActivity(perfil);
+        overridePendingTransition(0, 0);
+    }
+
+    public void irParaComunicados() {
+        Intent comunicados = new Intent(MainActivity.this, ComunicadosActivity.class);
+        startActivity(comunicados);
         overridePendingTransition(0, 0);
     }
 
