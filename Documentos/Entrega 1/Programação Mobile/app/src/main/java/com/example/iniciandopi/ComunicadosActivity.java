@@ -69,6 +69,7 @@ public class ComunicadosActivity extends AppCompatActivity {
         }
 
         carregarAvisos();
+        NotificacaoHelper.dispararNotificacao(this, "Próxima Etapa - Novo Aviso", "Abertura de inscrições para bolsas FIES 2026!");
     }
 
     // ---------- Lista de avisos ----------
