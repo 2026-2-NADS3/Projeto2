@@ -112,7 +112,6 @@ public class Perfil extends AppCompatActivity {
             });
         }
 
-        // Novo: botão ENEM abre a tela do ENEM
         if (btnMenuEnem != null) {
             btnMenuEnem.setOnClickListener(v -> {
                 Intent intent = new Intent(Perfil.this, EnemActivity.class);
@@ -158,6 +157,7 @@ public class Perfil extends AppCompatActivity {
         if (cursor != null && cursor.moveToFirst()) {
             int indexNome = cursor.getColumnIndex("nome");
             int indexRa = cursor.getColumnIndex("ra");
+            int indexEscola = cursor.getColumnIndex("escola");
 
             if (indexNome != -1) {
                 String nome = cursor.getString(indexNome);
@@ -175,12 +175,14 @@ public class Perfil extends AppCompatActivity {
                 }
             }
 
-            if (indexRa != -1) {
-                String ra = cursor.getString(indexRa);
-                if (ra != null && !ra.isEmpty() && txtSubPerfil != null) {
-                    txtSubPerfil.setText("RA: " + ra + " • E.E. Maria José");
-                }
+            String ra = indexRa != -1 ? cursor.getString(indexRa) : "2026.03.8841";
+            String escola = indexEscola != -1 ? cursor.getString(indexEscola) : "E.E. Maria José";
+            if (escola == null || escola.isEmpty()) escola = "E.E. Maria José";
+
+            if (txtSubPerfil != null) {
+                txtSubPerfil.setText("RA: " + ra + " • " + escola);
             }
+
             cursor.close();
         }
     }

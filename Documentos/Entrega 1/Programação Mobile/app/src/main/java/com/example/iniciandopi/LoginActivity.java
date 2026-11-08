@@ -29,10 +29,8 @@ public class LoginActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
-        int margem = (int) (24 * getResources().getDisplayMetrics().density); // 24dp em pixels
+        int margem = (int) (24 * getResources().getDisplayMetrics().density);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            // systemBars = barra de status e de navegação; ime = teclado.
-            // Somando os dois, quando o teclado abre a tela encolhe e o ScrollView consegue rolar.
             Insets barras = insets.getInsets(
                     WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.ime());
             v.setPadding(
@@ -97,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         String token = response.body().getAccessToken();
-                        dbHelper.salvarAluno(email, email, "2026.03.8841", token);
+                        dbHelper.salvarAluno(email, email, "2026.03.8841", "E.E. Maria José", token);
                         Toast.makeText(LoginActivity.this, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show();
                         prosseguirParaHome();
                     } else {
@@ -121,12 +119,15 @@ public class LoginActivity extends AppCompatActivity {
         if (cursor != null && cursor.moveToFirst()) {
             int indexNome = cursor.getColumnIndex("nome");
             int indexRa = cursor.getColumnIndex("ra");
+            int indexEscola = cursor.getColumnIndex("escola");
 
             String nome = indexNome != -1 ? cursor.getString(indexNome) : "Aluno";
             String ra = indexRa != -1 ? cursor.getString(indexRa) : "2026.03.8841";
+            String escola = indexEscola != -1 ? cursor.getString(indexEscola) : "E.E. Maria José";
+            if (escola == null || escola.isEmpty()) escola = "E.E. Maria José";
 
             cursor.close();
-            dbHelper.salvarAluno(email, nome, ra, "token_local_sqlite");
+            dbHelper.salvarAluno(email, nome, ra, escola, "token_local_sqlite");
             Toast.makeText(this, "Login efetuado com sucesso!", Toast.LENGTH_SHORT).show();
             prosseguirParaHome();
         } else {

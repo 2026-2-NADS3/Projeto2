@@ -15,7 +15,7 @@ import java.util.Locale;
 
 public class CadastroActivity extends AppCompatActivity {
 
-    public EditText edtNomeCadastro, edtEmailCpfCadastro, edtRaCadastro, edtSenhaCadastro;
+    public EditText edtNomeCadastro, edtEmailCpfCadastro, edtRaCadastro, edtInstituicaoCadastro, edtSenhaCadastro;
     public Button btnCadastrar, btnVoltarCadastro;
     private DatabaseHelper dbHelper;
 
@@ -25,10 +25,8 @@ public class CadastroActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cadastro);
 
-        int margem = (int) (24 * getResources().getDisplayMetrics().density); // 24dp em pixels
+        int margem = (int) (24 * getResources().getDisplayMetrics().density);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            // systemBars = barra de status e de navegação; ime = teclado.
-            // Somando os dois, quando o teclado abre a tela encolhe e o ScrollView consegue rolar.
             Insets barras = insets.getInsets(
                     WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.ime());
             v.setPadding(
@@ -45,6 +43,7 @@ public class CadastroActivity extends AppCompatActivity {
         edtNomeCadastro = findViewById(R.id.edtNomeCadastro);
         edtEmailCpfCadastro = findViewById(R.id.edtEmailCpfCadastro);
         edtRaCadastro = findViewById(R.id.edtRaCadastro);
+        edtInstituicaoCadastro = findViewById(R.id.edtInstituicaoCadastro);
         edtSenhaCadastro = findViewById(R.id.edtSenhaCadastro);
         btnCadastrar = findViewById(R.id.btnCadastrar);
 
@@ -62,9 +61,9 @@ public class CadastroActivity extends AppCompatActivity {
 
     public void cadastrarConta() {
         String nome = edtNomeCadastro != null ? edtNomeCadastro.getText().toString().trim() : "";
-        // toLowerCase: mesmo padrão do Login, para os dois "falarem a mesma língua".
         String email = edtEmailCpfCadastro != null ? edtEmailCpfCadastro.getText().toString().trim().toLowerCase(Locale.ROOT) : "";
         String ra = edtRaCadastro != null ? edtRaCadastro.getText().toString().trim() : "";
+        String escola = edtInstituicaoCadastro != null ? edtInstituicaoCadastro.getText().toString().trim() : "";
         String senha = edtSenhaCadastro != null ? edtSenhaCadastro.getText().toString().trim() : "";
 
         if (nome.isEmpty()) {
@@ -82,14 +81,14 @@ public class CadastroActivity extends AppCompatActivity {
             return;
         }
 
-        // Não deixa criar uma conta com e-mail que já existe
         if (dbHelper.emailJaCadastrado(email)) {
             Toast.makeText(this, "Este e-mail já está cadastrado. Volte e faça login.", Toast.LENGTH_LONG).show();
             return;
         }
 
-        boolean salvou = dbHelper.cadastrarUsuario(email, senha, nome, ra.isEmpty() ? "2026.03.8841" : ra);
-        Log.d("CADASTRO", "Conta salva? " + salvou + " | e-mail: " + email);
+        String escolaFinal = escola.isEmpty() ? "E.E. Maria José" : escola;
+        boolean salvou = dbHelper.cadastrarUsuario(email, senha, nome, ra.isEmpty() ? "2026.03.8841" : ra, escolaFinal);
+        Log.d("CADASTRO", "Conta salva? " + salvou + " | e-mail: " + email + " | escola: " + escolaFinal);
 
         if (salvou) {
             Toast.makeText(this, "Conta criada com sucesso!", Toast.LENGTH_SHORT).show();

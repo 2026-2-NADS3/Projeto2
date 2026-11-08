@@ -14,7 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class CarteiraActivity extends AppCompatActivity {
 
     public Button btnVoltarCarteira, btnInicio, btnCursos, btnAgenda, btnPerfil;
-    public TextView txtNomeAlunoCarteira, txtRaAlunoCarteira, txtInicialCarteira;
+    public TextView txtNomeAlunoCarteira, txtRaAlunoCarteira, txtInicialCarteira, valInst;
     private DatabaseHelper dbHelper;
 
     @Override
@@ -40,6 +40,7 @@ public class CarteiraActivity extends AppCompatActivity {
         txtNomeAlunoCarteira = findViewById(R.id.txtNomeAlunoCarteira);
         txtRaAlunoCarteira = findViewById(R.id.txtRaAlunoCarteira);
         txtInicialCarteira = findViewById(R.id.txtInicialCarteira);
+        valInst = findViewById(R.id.valInst);
 
         carregarDadosCarteira();
 
@@ -94,6 +95,7 @@ public class CarteiraActivity extends AppCompatActivity {
         if (cursor != null && cursor.moveToFirst()) {
             int indexNome = cursor.getColumnIndex("nome");
             int indexRa = cursor.getColumnIndex("ra");
+            int indexEscola = cursor.getColumnIndex("escola");
 
             if (indexNome != -1) {
                 String nome = cursor.getString(indexNome);
@@ -115,6 +117,13 @@ public class CarteiraActivity extends AppCompatActivity {
                 String ra = cursor.getString(indexRa);
                 if (ra != null && !ra.isEmpty() && txtRaAlunoCarteira != null) {
                     txtRaAlunoCarteira.setText("RA: " + ra);
+                }
+            }
+
+            if (indexEscola != -1) {
+                String escola = cursor.getString(indexEscola);
+                if (escola != null && !escola.isEmpty() && valInst != null) {
+                    valInst.setText(escola);
                 }
             }
             cursor.close();

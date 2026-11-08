@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "ProximaEtapa.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -22,13 +22,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "email TEXT UNIQUE, " +
                 "senha TEXT, " +
                 "nome TEXT, " +
-                "ra TEXT)";
+                "ra TEXT, " +
+                "escola TEXT)";
 
         String createTableAluno = "CREATE TABLE IF NOT EXISTS aluno (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "email TEXT, " +
                 "nome TEXT, " +
                 "ra TEXT, " +
+                "escola TEXT, " +
                 "token TEXT)";
 
         String createTablePresencas = "CREATE TABLE IF NOT EXISTS presencas (" +
@@ -134,7 +136,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    /** Diz se já existe uma conta com este e-mail. */
     public boolean emailJaCadastrado(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT 1 FROM usuarios WHERE email = ?", new String[]{email});
@@ -143,18 +144,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return existe;
     }
 
-    public boolean cadastrarUsuario(String email, String senha, String nome, String ra) {
+    public boolean cadastrarUsuario(String email, String senha, String nome, String ra, String escola) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("email", email);
         values.put("senha", senha);
         values.put("nome", nome);
         values.put("ra", ra);
+        values.put("escola", escola);
 
-        // insert normal: se o e-mail já existir, devolve -1 e NÃO sobrescreve a conta antiga
         long result = db.insert("usuarios", null, values);
         if (result != -1) {
-            salvarAluno(email, nome, ra, "token_local");
+            salvarAluno(email, nome, ra, escola, "token_local");
             return true;
         }
         return false;
@@ -165,7 +166,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM usuarios WHERE email = ? AND senha = ?", new String[]{email, senha});
     }
 
-    public boolean salvarAluno(String email, String nome, String ra, String token) {
+    public boolean salvarAluno(String email, String nome, String ra, String escola, String token) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM aluno");
 
@@ -173,6 +174,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("email", email);
         values.put("nome", nome);
         values.put("ra", ra);
+        values.put("escola", escola);
         values.put("token", token);
 
         long result = db.insert("aluno", null, values);
@@ -215,10 +217,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    /**
-     * Verifica se já existe presença para esta aula neste dia.
-     * O dia vem no formato "dd/MM/yyyy" e a coluna data guarda "dd/MM/yyyy às HH:mm".
-     */
     public boolean existePresenca(String aula, String dia) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(
