@@ -1,0 +1,12 @@
+PE|AULA|Aula 04 - Comunicacao;valido
+PE|AULA|Aula 01;valido
+  PE|AULA|Aula 02  ;valido
+PE|AULA|;invalido
+PE|AULA|   ;invalido
+PE|PALESTRA|Aula 04;invalido
+pe|AULA|Aula 04;invalido
+PE|AULA;invalido
+PE|AULA|Aula 04|2026-11-01;invalido
+https://google.com;invalido
+texto qualquer;invalido
+||;invalido

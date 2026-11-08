@@ -108,7 +108,13 @@ public class QrPresencaActivity extends AppCompatActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() != null) {
-                aulaLida = result.getContents().trim();
+                String lido = result.getContents().trim();
+                if (!QrValidador.ehValido(lido)) {
+                    Toast.makeText(this, "QR Code inválido. Use o QR Code oficial da aula.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                aulaLida = QrValidador.extrairNomeAula(lido);
+
                 if (txtNomeAulaDetectada != null) {
                     txtNomeAulaDetectada.setText(aulaLida);
                 }

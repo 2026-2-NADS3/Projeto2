@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<title>Relatorio de Teste de Carga</title>
+<style>
+body{font-family:Arial,sans-serif;margin:32px;color:#0F172A}
+h1{margin-bottom:4px} .sub{color:#64748B;margin-bottom:24px}
+table{border-collapse:collapse;width:100%;margin:16px 0}
+th,td{border:1px solid #CBD5E1;padding:8px;text-align:center;font-size:13px}
+th{background:#8B5CF6;color:#fff}
+.aviso{background:#FEF3C7;border:1px solid #D97706;padding:10px;border-radius:6px}
+.linha{display:flex;align-items:center;margin:6px 0}
+.linha span{width:110px;font-size:13px}
+.barra{background:#22C55E;color:#fff;padding:4px 8px;border-radius:4px;font-size:12px}
+</style></head><body>
+<h1>Relatorio de Teste de Carga do Servidor</h1>
+<div class="sub">Proxima Etapa - App do Aluno | 08/11/2026 16:57</div>
+<p><b>Alvo:</b> GET https://jzaageilkvvucgedlwxr.supabase.co/rest/v1/courses</p>
+<p class="aviso">Chave anon demo usada: o servidor responde 401 (nao autorizado). O teste mede tempo e taxa de resposta do servidor, mas nao a leitura de dados reais.</p>
+<h2>Resultados por etapa</h2>
+<table>
+<tr><th>Usuarios simultaneos</th><th>Requisicoes</th><th>Req/s</th><th>Media (ms)</th>
+<th>p50 (ms)</th><th>p95 (ms)</th><th>Maximo (ms)</th><th>Taxa de resposta</th><th>Status HTTP</th></tr>
+<tr><td>5</td><td>50</td><td>7.2</td><td>561</td><td>241</td><td>2370</td><td>2385</td><td>98.0%</td><td>falha de rede: 1, 401 nao autorizado: 49</td></tr><tr><td>10</td><td>100</td><td>71.3</td><td>120</td><td>79</td><td>356</td><td>409</td><td>100.0%</td><td>401 nao autorizado: 100</td></tr><tr><td>25</td><td>250</td><td>115.1</td><td>151</td><td>104</td><td>512</td><td>753</td><td>100.0%</td><td>401 nao autorizado: 250</td></tr>
+</table>
+<h2>Tempo p95 por etapa</h2>
+<div class='linha'><span>5 usuarios</span><div class='barra' style='width:100%'>2370 ms</div></div><div class='linha'><span>10 usuarios</span><div class='barra' style='width:15%'>356 ms</div></div><div class='linha'><span>25 usuarios</span><div class='barra' style='width:22%'>512 ms</div></div>
+</body></html>
