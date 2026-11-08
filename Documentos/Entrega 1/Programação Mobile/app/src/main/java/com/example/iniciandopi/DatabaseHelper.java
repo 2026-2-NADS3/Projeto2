@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "ProximaEtapa.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -35,6 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String createTablePresencas = "CREATE TABLE IF NOT EXISTS presencas (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "aluno_email TEXT, " +
                 "aula TEXT, " +
                 "data TEXT, " +
                 "sincronizado INTEGER)";
@@ -53,11 +54,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "data TEXT, " +
                 "horas TEXT)";
 
+        String createTableTestes = "CREATE TABLE IF NOT EXISTS resultados_teste (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "email TEXT, " +
+                "tipo TEXT, " +
+                "resultado TEXT)";
+
         db.execSQL(createTableUsuarios);
         db.execSQL(createTableAluno);
         db.execSQL(createTablePresencas);
         db.execSQL(createTableCursos);
         db.execSQL(createTableCertificados);
+        db.execSQL(createTableTestes);
 
         populaDadosIniciais(db);
     }
@@ -106,24 +114,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cert2.put("data", "02 Set 2026");
         cert2.put("horas", "12h");
         db.insert("certificados", null, cert2);
-
-        ContentValues p1 = new ContentValues();
-        p1.put("aula", "Aula 03: Comunicação Assertiva");
-        p1.put("data", "28/10/2026 às 14:00");
-        p1.put("sincronizado", 1);
-        db.insert("presencas", null, p1);
-
-        ContentValues p2 = new ContentValues();
-        p2.put("aula", "Aula 02: Fundamentos de Oratória");
-        p2.put("data", "21/10/2026 às 14:00");
-        p2.put("sincronizado", 1);
-        db.insert("presencas", null, p2);
-
-        ContentValues p3 = new ContentValues();
-        p3.put("aula", "Aula 01: Introdução ao Módulo 2");
-        p3.put("data", "14/10/2026 às 14:00");
-        p3.put("sincronizado", 1);
-        db.insert("presencas", null, p3);
     }
 
     @Override
@@ -133,6 +123,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS presencas");
         db.execSQL("DROP TABLE IF EXISTS cursos");
         db.execSQL("DROP TABLE IF EXISTS certificados");
+        db.execSQL("DROP TABLE IF EXISTS resultados_teste");
         onCreate(db);
     }
 
@@ -198,7 +189,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor obterPresencas() {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM presencas ORDER BY id DESC", null);
+        Cursor cursorAluno = obterAlunoLogado();
+        String email = "";
+        if (cursorAluno != null && cursorAluno.moveToFirst()) {
+            int idxEmail = cursorAluno.getColumnIndex("email");
+            if (idxEmail != -1) {
+                email = cursorAluno.getString(idxEmail);
+            }
+            cursorAluno.close();
+        }
+
+        if (email.isEmpty()) {
+            return db.rawQuery("SELECT * FROM presencas ORDER BY id DESC", null);
+        }
+        return db.rawQuery("SELECT * FROM presencas WHERE aluno_email = ? ORDER BY id DESC", new String[]{email});
     }
 
     public void limparSessao() {
@@ -208,12 +212,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean salvarPresencaLocal(String aula, String data) {
         SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursorAluno = obterAlunoLogado();
+        String email = "aluno@proximaetapa.org";
+        if (cursorAluno != null && cursorAluno.moveToFirst()) {
+            int idxEmail = cursorAluno.getColumnIndex("email");
+            if (idxEmail != -1) {
+                email = cursorAluno.getString(idxEmail);
+            }
+            cursorAluno.close();
+        }
+
         ContentValues values = new ContentValues();
+        values.put("aluno_email", email);
         values.put("aula", aula);
         values.put("data", data);
         values.put("sincronizado", 0);
 
         long result = db.insert("presencas", null, values);
+        return result != -1;
+    }
+
+    public boolean salvarResultadoTesteLocal(String email, String tipo, String resultado) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("email", email);
+        values.put("tipo", tipo);
+        values.put("resultado", resultado);
+
+        long result = db.insert("resultados_teste", null, values);
         return result != -1;
     }
 

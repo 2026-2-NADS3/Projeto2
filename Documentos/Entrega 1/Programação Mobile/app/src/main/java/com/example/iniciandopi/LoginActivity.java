@@ -43,6 +43,13 @@ public class LoginActivity extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
+        Cursor cursorSession = dbHelper.obterAlunoLogado();
+        if (cursorSession != null && cursorSession.moveToFirst()) {
+            cursorSession.close();
+            prosseguirParaHome();
+            return;
+        }
+
         edtEmailCpf = findViewById(R.id.edtEmailCpf);
         edtSenha = findViewById(R.id.edtSenha);
         btnEntrar = findViewById(R.id.btnEntrar);
