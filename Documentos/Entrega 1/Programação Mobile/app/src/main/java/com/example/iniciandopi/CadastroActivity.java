@@ -27,12 +27,15 @@ public class CadastroActivity extends AppCompatActivity {
 
         int margem = (int) (24 * getResources().getDisplayMetrics().density); // 24dp em pixels
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            // systemBars = barra de status e de navegação; ime = teclado.
+            // Somando os dois, quando o teclado abre a tela encolhe e o ScrollView consegue rolar.
+            Insets barras = insets.getInsets(
+                    WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.ime());
             v.setPadding(
-                    systemBars.left + margem,
-                    systemBars.top + margem,
-                    systemBars.right + margem,
-                    systemBars.bottom + margem);
+                    barras.left + margem,
+                    barras.top + margem,
+                    barras.right + margem,
+                    barras.bottom + margem);
             return insets;
         });
 
