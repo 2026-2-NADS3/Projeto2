@@ -18,7 +18,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     public Button btnInicio, btnCursos, btnAgenda, btnCertificados, btnPerfil, btnNotificacoes;
-    public View cardQrPresenca, cardMeuCard;
+    public View cardQrPresenca, cardMeuCard, cardAvatar;
     public TextView txtOlaUsuario, txtInicialAvatar, txtMesBadge, txtDiaBadge, txtBadgeNotificacoes;
     private DatabaseHelper dbHelper;
 
@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         cardQrPresenca = findViewById(R.id.cardQrPresenca);
         cardMeuCard = findViewById(R.id.cardMeuCard);
+        cardAvatar = findViewById(R.id.cardAvatar);
 
         txtOlaUsuario = findViewById(R.id.txtOlaUsuario);
         txtInicialAvatar = findViewById(R.id.txtInicialAvatar);
@@ -77,6 +78,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (btnNotificacoes != null) {
             btnNotificacoes.setOnClickListener(v -> irParaComunicados());
+        }
+
+        // Tocar no avatar (círculo com as iniciais) abre a tela Perfil
+        if (cardAvatar != null) {
+            cardAvatar.setOnClickListener(v -> irParaPerfil());
         }
 
         if (cardQrPresenca != null) {

@@ -13,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class Visualizar extends AppCompatActivity {
 
     public Button btnVoltar;
-    public TextView txtNomeAlunoCertificado;
+    public TextView txtNomeAlunoCertificado, txtCorpoCert, txtFooterCert;
     private DatabaseHelper dbHelper;
 
     @Override
@@ -32,14 +32,30 @@ public class Visualizar extends AppCompatActivity {
 
         btnVoltar = findViewById(R.id.btnVoltar);
         txtNomeAlunoCertificado = findViewById(R.id.txtNomeAlunoCertificado);
+        txtCorpoCert = findViewById(R.id.txtCorpoCert);
+        txtFooterCert = findViewById(R.id.txtFooterCert);
 
         carregarNomeAluno();
+        carregarDadosCertificado();
 
         if (btnVoltar != null) {
             btnVoltar.setOnClickListener(v -> {
                 finish();
                 overridePendingTransition(0, 0);
             });
+        }
+    }
+
+    /** Preenche o texto com o certificado que o aluno escolheu na lista. */
+    private void carregarDadosCertificado() {
+        CertificadoInfo info = CertificadoInfo.doIntent(getIntent());
+
+        if (txtCorpoCert != null) {
+            txtCorpoCert.setText("concluiu com êxito a formação em " + info.titulo
+                    + " com carga horária total de " + info.getHorasPorExtenso() + ".");
+        }
+        if (txtFooterCert != null) {
+            txtFooterCert.setText("Emitido em " + info.data + " • Código: " + info.getCodigo());
         }
     }
 

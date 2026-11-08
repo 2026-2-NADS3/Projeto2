@@ -233,6 +233,21 @@
                 android:layout_marginTop="12dp" />
 
             <Button
+                android:id="@+id/btnMenuEnem"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="ENEM"
+                android:textColor="#0F172A"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:gravity="start|center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:background="@drawable/bg_card_white"
+                app:backgroundTint="@null"
+                android:layout_marginTop="12dp" />
+
+            <Button
                 android:id="@+id/btnMenuComunicados"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"

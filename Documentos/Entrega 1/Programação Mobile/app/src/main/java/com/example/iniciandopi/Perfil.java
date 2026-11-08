@@ -14,7 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class Perfil extends AppCompatActivity {
 
     public Button btnInicio, btnCursos, btnAgenda, btnCertificados, btnPerfil;
-    public Button btnMenuCarteira, btnMenuFrequencia, btnMenuCertificados, btnMenuTeste, btnMenuComunicados, btnMenuChat, btnMenuSair;
+    public Button btnMenuCarteira, btnMenuFrequencia, btnMenuCertificados, btnMenuTeste, btnMenuEnem, btnMenuComunicados, btnMenuChat, btnMenuSair;
     public TextView txtNomePerfil, txtSubPerfil, txtInicialPerfil;
     private DatabaseHelper dbHelper;
 
@@ -42,6 +42,7 @@ public class Perfil extends AppCompatActivity {
         btnMenuFrequencia = findViewById(R.id.btnMenuFrequencia);
         btnMenuCertificados = findViewById(R.id.btnMenuCertificados);
         btnMenuTeste = findViewById(R.id.btnMenuTeste);
+        btnMenuEnem = findViewById(R.id.btnMenuEnem);
         btnMenuComunicados = findViewById(R.id.btnMenuComunicados);
         btnMenuChat = findViewById(R.id.btnMenuChat);
         btnMenuSair = findViewById(R.id.btnMenuSair);
@@ -106,6 +107,15 @@ public class Perfil extends AppCompatActivity {
         if (btnMenuTeste != null) {
             btnMenuTeste.setOnClickListener(v -> {
                 Intent intent = new Intent(Perfil.this, TestePerfilActivity.class);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+            });
+        }
+
+        // Novo: botão ENEM abre a tela do ENEM
+        if (btnMenuEnem != null) {
+            btnMenuEnem.setOnClickListener(v -> {
+                Intent intent = new Intent(Perfil.this, EnemActivity.class);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
             });

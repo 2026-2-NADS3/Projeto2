@@ -1,6 +1,7 @@
 package com.example.iniciandopi;
 
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -16,9 +17,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -29,10 +32,10 @@ import java.io.OutputStream;
 
 public class BaixarPDF extends AppCompatActivity {
 
-    private static final String NOME_ARQUIVO = "Certificado_Logica_Programacao.pdf";
-
     public Button btnVoltarTelaBaixarPDF, btnBaixarPdfConfirmar, btnAdicionarLinkedin;
+    public Button btnCompartilharWhatsapp, btnCompartilharEmail;
     private DatabaseHelper dbHelper;
+    private CertificadoInfo info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +51,16 @@ public class BaixarPDF extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
+        // Certificado escolhido na tela anterior
+        info = CertificadoInfo.doIntent(getIntent());
+        TextView txtNomeArquivo = findViewById(R.id.txtNomeArquivoPdf);
+        if (txtNomeArquivo != null) txtNomeArquivo.setText(info.getNomeArquivo());
+
         btnVoltarTelaBaixarPDF = findViewById(R.id.btnVoltarTelaBaixarPDF);
         btnBaixarPdfConfirmar = findViewById(R.id.btnBaixarPdfConfirmar);
         btnAdicionarLinkedin = findViewById(R.id.btnAdicionarLinkedin);
+        btnCompartilharWhatsapp = findViewById(R.id.btnCompartilharWhatsapp);
+        btnCompartilharEmail = findViewById(R.id.btnCompartilharEmail);
 
         if (btnVoltarTelaBaixarPDF != null) {
             btnVoltarTelaBaixarPDF.setOnClickListener(v -> {
@@ -66,6 +76,102 @@ public class BaixarPDF extends AppCompatActivity {
         if (btnAdicionarLinkedin != null) {
             btnAdicionarLinkedin.setOnClickListener(v -> adicionarAoLinkedin());
         }
+
+        if (btnCompartilharWhatsapp != null) {
+            btnCompartilharWhatsapp.setOnClickListener(v -> compartilharWhatsapp());
+        }
+
+        if (btnCompartilharEmail != null) {
+            btnCompartilharEmail.setOnClickListener(v -> compartilharEmail());
+        }
+    }
+
+    // ---------- Compartilhar: PDF no cache + FileProvider ----------
+
+    /** Gera o PDF na pasta de cache do app (so para compartilhar) e devolve o arquivo. */
+    private File gerarPdfParaCompartilhar() throws IOException {
+        File pasta = new File(getCacheDir(), "certificados");
+        if (!pasta.exists() && !pasta.mkdirs()) throw new IOException("Sem pasta de cache");
+        File arquivo = new File(pasta, info.getNomeArquivo());
+
+        PdfDocument documento = criarPdf(obterNomeAluno());
+        try (FileOutputStream saida = new FileOutputStream(arquivo)) {
+            documento.writeTo(saida);
+        } finally {
+            documento.close();
+        }
+        return arquivo;
+    }
+
+    private Uri uriDoPdf(File arquivo) {
+        return FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", arquivo);
+    }
+
+    // ---------- WhatsApp (PDF anexado) ----------
+
+    private void compartilharWhatsapp() {
+        Uri uri;
+        try {
+            uri = uriDoPdf(gerarPdfParaCompartilhar());
+        } catch (IOException | IllegalArgumentException e) {
+            Toast.makeText(this, "Não foi possível gerar o PDF para compartilhar.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("application/pdf");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        intent.putExtra(Intent.EXTRA_TEXT, "Meu certificado de " + info.titulo + " - Próxima Etapa");
+        intent.setClipData(ClipData.newRawUri("Certificado", uri));
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        // Tenta o WhatsApp normal, depois o Business; se nenhum existir, abre o seletor do Android
+        String[] pacotes = {"com.whatsapp", "com.whatsapp.w4b"};
+        for (String pacote : pacotes) {
+            try {
+                intent.setPackage(pacote);
+                startActivity(intent);
+                return;
+            } catch (ActivityNotFoundException ignorado) {
+                // tenta o proximo
+            }
+        }
+
+        intent.setPackage(null);
+        try {
+            startActivity(Intent.createChooser(intent, "Compartilhar certificado"));
+            Toast.makeText(this, "WhatsApp não encontrado. Escolha outro app.", Toast.LENGTH_SHORT).show();
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "Nenhum app disponível para compartilhar.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    // ---------- E-mail (PDF anexado) ----------
+
+    private void compartilharEmail() {
+        Uri uri;
+        try {
+            uri = uriDoPdf(gerarPdfParaCompartilhar());
+        } catch (IOException | IllegalArgumentException e) {
+            Toast.makeText(this, "Não foi possível gerar o PDF para enviar.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("message/rfc822"); // faz o Android mostrar só apps de e-mail
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Certificado - " + info.titulo + " | Próxima Etapa");
+        intent.putExtra(Intent.EXTRA_TEXT,
+                "Olá!\n\nSegue em anexo o meu certificado de conclusão de " + info.titulo
+                        + " (Próxima Etapa).\n");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        intent.setClipData(ClipData.newRawUri("Certificado", uri));
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        try {
+            startActivity(Intent.createChooser(intent, "Enviar certificado por e-mail"));
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "Nenhum app de e-mail instalado.", Toast.LENGTH_LONG).show();
+        }
     }
 
     // ---------- LinkedIn ----------
@@ -73,11 +179,11 @@ public class BaixarPDF extends AppCompatActivity {
     /** Abre o formulário "Licenças e certificados" do LinkedIn já preenchido. */
     private void adicionarAoLinkedin() {
         String url = "https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME"
-                + "&name=" + Uri.encode("Lógica de Programação")
+                + "&name=" + Uri.encode(info.titulo)
                 + "&organizationName=" + Uri.encode("Próxima Etapa")
-                + "&issueYear=2026"
-                + "&issueMonth=10"
-                + "&certId=" + Uri.encode("PE-2026-8841");
+                + "&issueYear=" + info.getAno()
+                + "&issueMonth=" + info.getMes()
+                + "&certId=" + Uri.encode(info.getCodigo());
 
         try {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
@@ -123,11 +229,11 @@ public class BaixarPDF extends AppCompatActivity {
     /** Desenha o certificado em uma página A4 deitada (842 x 595 pontos). */
     private PdfDocument criarPdf(String nomeAluno) {
         PdfDocument documento = new PdfDocument();
-        PdfDocument.PageInfo info = new PdfDocument.PageInfo.Builder(842, 595, 1).create();
-        PdfDocument.Page pagina = documento.startPage(info);
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(842, 595, 1).create();
+        PdfDocument.Page pagina = documento.startPage(pageInfo);
         Canvas canvas = pagina.getCanvas();
 
-        int largura = info.getPageWidth();
+        int largura = pageInfo.getPageWidth();
         float centro = largura / 2f;
 
         // Borda roxa
@@ -162,12 +268,21 @@ public class BaixarPDF extends AppCompatActivity {
         texto.setColor(Color.parseColor("#334155"));
         texto.setTypeface(Typeface.DEFAULT);
         texto.setTextSize(17);
-        canvas.drawText("concluiu com êxito a formação em Lógica de Programação", centro, 345, texto);
-        canvas.drawText("com carga horária total de 40 horas.", centro, 372, texto);
+        canvas.drawText("concluiu com êxito a formação em", centro, 335, texto);
+
+        texto.setColor(Color.parseColor("#8B5CF6"));
+        texto.setTypeface(Typeface.DEFAULT_BOLD);
+        texto.setTextSize(24);
+        canvas.drawText(info.titulo, centro, 375, texto);
+
+        texto.setColor(Color.parseColor("#334155"));
+        texto.setTypeface(Typeface.DEFAULT);
+        texto.setTextSize(17);
+        canvas.drawText("com carga horária total de " + info.getHorasPorExtenso() + ".", centro, 410, texto);
 
         texto.setColor(Color.parseColor("#94A3B8"));
         texto.setTextSize(13);
-        canvas.drawText("Emitido em 15/10/2026 • Código: PE-2026-8841", centro, 470, texto);
+        canvas.drawText("Emitido em " + info.data + " • Código: " + info.getCodigo(), centro, 470, texto);
 
         documento.finishPage(pagina);
         return documento;
@@ -175,10 +290,12 @@ public class BaixarPDF extends AppCompatActivity {
 
     /** Salva o PDF e devolve um texto dizendo onde ficou. */
     private String salvarPdf(PdfDocument documento) throws IOException {
+        String nomeArquivo = info.getNomeArquivo();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             // Android 10+: vai direto para a pasta Downloads, sem pedir permissão
             ContentValues valores = new ContentValues();
-            valores.put(MediaStore.Downloads.DISPLAY_NAME, NOME_ARQUIVO);
+            valores.put(MediaStore.Downloads.DISPLAY_NAME, nomeArquivo);
             valores.put(MediaStore.Downloads.MIME_TYPE, "application/pdf");
             valores.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
 
@@ -195,7 +312,7 @@ public class BaixarPDF extends AppCompatActivity {
             // Android 9 ou menor: salva na pasta do próprio app
             File pasta = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
             if (pasta == null) throw new IOException("Sem armazenamento");
-            File arquivo = new File(pasta, NOME_ARQUIVO);
+            File arquivo = new File(pasta, nomeArquivo);
             try (FileOutputStream saida = new FileOutputStream(arquivo)) {
                 documento.writeTo(saida);
             }
