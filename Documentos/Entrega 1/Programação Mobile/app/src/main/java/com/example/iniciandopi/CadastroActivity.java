@@ -2,6 +2,7 @@ package com.example.iniciandopi;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import java.util.Locale;
 
 public class CadastroActivity extends AppCompatActivity {
 
@@ -23,9 +25,14 @@ public class CadastroActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cadastro);
 
+        int margem = (int) (24 * getResources().getDisplayMetrics().density); // 24dp em pixels
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(
+                    systemBars.left + margem,
+                    systemBars.top + margem,
+                    systemBars.right + margem,
+                    systemBars.bottom + margem);
             return insets;
         });
 
@@ -52,7 +59,8 @@ public class CadastroActivity extends AppCompatActivity {
 
     public void cadastrarConta() {
         String nome = edtNomeCadastro != null ? edtNomeCadastro.getText().toString().trim() : "";
-        String email = edtEmailCpfCadastro != null ? edtEmailCpfCadastro.getText().toString().trim() : "";
+        // toLowerCase: mesmo padrão do Login, para os dois "falarem a mesma língua".
+        String email = edtEmailCpfCadastro != null ? edtEmailCpfCadastro.getText().toString().trim().toLowerCase(Locale.ROOT) : "";
         String ra = edtRaCadastro != null ? edtRaCadastro.getText().toString().trim() : "";
         String senha = edtSenhaCadastro != null ? edtSenhaCadastro.getText().toString().trim() : "";
 
@@ -71,7 +79,14 @@ public class CadastroActivity extends AppCompatActivity {
             return;
         }
 
+        // Não deixa criar uma conta com e-mail que já existe
+        if (dbHelper.emailJaCadastrado(email)) {
+            Toast.makeText(this, "Este e-mail já está cadastrado. Volte e faça login.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         boolean salvou = dbHelper.cadastrarUsuario(email, senha, nome, ra.isEmpty() ? "2026.03.8841" : ra);
+        Log.d("CADASTRO", "Conta salva? " + salvou + " | e-mail: " + email);
 
         if (salvou) {
             Toast.makeText(this, "Conta criada com sucesso!", Toast.LENGTH_SHORT).show();

@@ -29,9 +29,14 @@ public class LoginActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
+        int margem = (int) (24 * getResources().getDisplayMetrics().density); // 24dp em pixels
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(
+                    systemBars.left + margem,
+                    systemBars.top + margem,
+                    systemBars.right + margem,
+                    systemBars.bottom + margem);
             return insets;
         });
 

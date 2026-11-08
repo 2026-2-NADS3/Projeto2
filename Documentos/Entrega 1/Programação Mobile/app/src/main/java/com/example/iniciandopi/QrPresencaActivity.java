@@ -13,13 +13,21 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class QrPresencaActivity extends AppCompatActivity {
+
+    private static final Locale PT_BR = Locale.forLanguageTag("pt-BR");
 
     public Button btnVoltarQr, btnConfirmarPresenca;
     public View frameScanner;
     public TextView txtNomeAulaDetectada, txtProfAulaDetectada;
     private DatabaseHelper dbHelper;
+
+    // Guarda o que foi lido no QR. Fica null enquanto nada foi lido.
+    private String aulaLida = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,15 +61,7 @@ public class QrPresencaActivity extends AppCompatActivity {
         }
 
         if (btnConfirmarPresenca != null) {
-            btnConfirmarPresenca.setOnClickListener(v -> {
-                String aula = txtNomeAulaDetectada != null ? txtNomeAulaDetectada.getText().toString() : "Aula Geral";
-                if (dbHelper != null) {
-                    dbHelper.salvarPresencaLocal(aula, "01/11/2026 às 20:00");
-                }
-                Toast.makeText(QrPresencaActivity.this, "Presença confirmada e salva no SQLite local!", Toast.LENGTH_LONG).show();
-                finish();
-                overridePendingTransition(0, 0);
-            });
+            btnConfirmarPresenca.setOnClickListener(v -> confirmarPresenca());
         }
     }
 
@@ -74,19 +74,48 @@ public class QrPresencaActivity extends AppCompatActivity {
         integrator.initiateScan();
     }
 
+    /** Salva a presença no SQLite, com data real e sem duplicar. */
+    private void confirmarPresenca() {
+        // 1) Só confirma se um QR já foi lido
+        if (aulaLida == null) {
+            Toast.makeText(this, "Leia o QR Code da aula antes de confirmar.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Date agora = new Date();
+        String dia = new SimpleDateFormat("dd/MM/yyyy", PT_BR).format(agora);
+        String dataHora = new SimpleDateFormat("dd/MM/yyyy 'às' HH:mm", PT_BR).format(agora);
+
+        // 2) Evita presença duplicada para a mesma aula no mesmo dia
+        if (dbHelper.existePresenca(aulaLida, dia)) {
+            Toast.makeText(this, "Sua presença nesta aula já foi registrada hoje.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // 3) Salva com a data e hora reais
+        boolean salvou = dbHelper.salvarPresencaLocal(aulaLida, dataHora);
+        if (salvou) {
+            Toast.makeText(this, "Presença confirmada e salva no SQLite local!", Toast.LENGTH_LONG).show();
+            finish();
+            overridePendingTransition(0, 0);
+        } else {
+            Toast.makeText(this, "Erro ao salvar a presença. Tente novamente.", Toast.LENGTH_LONG).show();
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() != null) {
-                String conteudoLido = result.getContents();
+                aulaLida = result.getContents().trim();
                 if (txtNomeAulaDetectada != null) {
-                    txtNomeAulaDetectada.setText(conteudoLido);
+                    txtNomeAulaDetectada.setText(aulaLida);
                 }
                 if (txtProfAulaDetectada != null) {
                     txtProfAulaDetectada.setText("Código verificado • Presença pendente de confirmação");
                 }
-                Toast.makeText(this, "QR Code Lido: " + conteudoLido, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "QR Code lido com sucesso!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Leitura cancelada", Toast.LENGTH_SHORT).show();
             }

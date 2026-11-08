@@ -134,6 +134,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /** Diz se já existe uma conta com este e-mail. */
+    public boolean emailJaCadastrado(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT 1 FROM usuarios WHERE email = ?", new String[]{email});
+        boolean existe = cursor.moveToFirst();
+        cursor.close();
+        return existe;
+    }
+
     public boolean cadastrarUsuario(String email, String senha, String nome, String ra) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -142,7 +151,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("nome", nome);
         values.put("ra", ra);
 
-        long result = db.insertWithOnConflict("usuarios", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        // insert normal: se o e-mail já existir, devolve -1 e NÃO sobrescreve a conta antiga
+        long result = db.insert("usuarios", null, values);
         if (result != -1) {
             salvarAluno(email, nome, ra, "token_local");
             return true;
@@ -203,5 +213,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert("presencas", null, values);
         return result != -1;
+    }
+
+    /**
+     * Verifica se já existe presença para esta aula neste dia.
+     * O dia vem no formato "dd/MM/yyyy" e a coluna data guarda "dd/MM/yyyy às HH:mm".
+     */
+    public boolean existePresenca(String aula, String dia) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT 1 FROM presencas WHERE aula = ? AND data LIKE ?",
+                new String[]{aula, dia + "%"});
+        boolean existe = cursor.moveToFirst();
+        cursor.close();
+        return existe;
     }
 }

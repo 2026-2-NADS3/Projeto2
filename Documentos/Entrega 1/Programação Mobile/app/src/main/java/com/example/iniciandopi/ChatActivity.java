@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import java.text.Normalizer;
+import java.util.Locale;
+import java.util.regex.Pattern;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -65,17 +68,19 @@ public class ChatActivity extends AppCompatActivity {
         if (dbHelper == null || msgBot1 == null) return;
 
         Cursor cursor = dbHelper.obterAlunoLogado();
-        if (cursor != null && cursor.moveToFirst()) {
+        if (cursor == null) return;
+
+        if (cursor.moveToFirst()) {
             int indexNome = cursor.getColumnIndex("nome");
             if (indexNome != -1) {
                 String nome = cursor.getString(indexNome);
-                if (nome != null && !nome.isEmpty()) {
-                    String primeiroNome = nome.split(" ")[0];
+                if (nome != null && !nome.trim().isEmpty()) {
+                    String primeiroNome = nome.trim().split(" ")[0];
                     msgBot1.setText("Olá, " + primeiroNome + "! Como posso te ajudar com seus cursos hoje?");
                 }
             }
-            cursor.close();
         }
+        cursor.close();
     }
 
     public void enviarMensagem() {
@@ -136,24 +141,55 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
+    // ---------- Respostas automáticas (usadas quando a API não responde) ----------
+
+    /** Tira acentos e deixa minúsculo: "Presença" vira "presenca". */
+    private String normalizar(String texto) {
+        return Normalizer.normalize(texto, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .toLowerCase(Locale.ROOT);
+    }
+
+    /** Vale se o texto contém qualquer um dos pedaços (serve para palavras longas). */
+    private boolean contem(String texto, String... pedacos) {
+        for (String p : pedacos) {
+            if (texto.contains(p)) return true;
+        }
+        return false;
+    }
+
+    /** Vale só se for a palavra inteira (serve para palavras curtas como "ra" e "qr"). */
+    private boolean temPalavra(String texto, String... palavras) {
+        for (String p : palavras) {
+            if (Pattern.compile("\\b" + Pattern.quote(p) + "\\b").matcher(texto).find()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void gerarRespostaIaContextual(String pergunta) {
-        String p = pergunta.toLowerCase();
+        String p = normalizar(pergunta);
         String resposta;
 
-        if (p.contains("certificado") || p.contains("pdf")) {
-            resposta = "Para visualizar ou baixar seus certificados em PDF, acesse a aba 'Perfil' > 'Meus Certificados' e clique em 'Baixar PDF'.";
-        } else if (p.contains("presença") || p.contains("presenca") || p.contains("qr")) {
-            resposta = "Você pode registrar sua presença abrindo o 'QR Presença' na Home e apontando a câmera do celular para o QR Code da sala.";
-        } else if (p.contains("curso") || p.contains("inscrição") || p.contains("inscricao")) {
+        if (temPalavra(p, "oi", "ola", "bom dia", "boa tarde", "boa noite")) {
+            resposta = "Olá! Posso ajudar com cursos, agenda, presença por QR Code, certificados, carteira do estudante e teste vocacional. Sobre o que você quer saber?";
+        } else if (contem(p, "obrigad", "valeu")) {
+            resposta = "De nada! Se tiver mais alguma dúvida, é só perguntar.";
+        } else if (contem(p, "certificad", "pdf", "linkedin")) {
+            resposta = "Para visualizar ou baixar seus certificados em PDF, acesse a aba 'Perfil' > 'Meus Certificados' e clique em 'Baixar PDF'. Lá também há o botão para adicionar ao LinkedIn.";
+        } else if (contem(p, "presenca", "frequencia", "chamada") || temPalavra(p, "qr", "qrcode")) {
+            resposta = "Você pode registrar sua presença abrindo o 'QR Presença' na Home e apontando a câmera do celular para o QR Code da sala. O histórico fica em 'Perfil' > 'Frequência'.";
+        } else if (contem(p, "curso", "inscricao", "inscrever", "modulo", "trilha")) {
             resposta = "Você pode consultar os cursos disponíveis e confirmar sua inscrição na aba 'Cursos' no menu inferior.";
-        } else if (p.contains("agenda") || p.contains("aula") || p.contains("horário") || p.contains("horario")) {
-            resposta = "Sua agenda com os horários de aulas e encontros presenciais ou online fica na aba 'Agenda'.";
-        } else if (p.contains("carteira") || p.contains("card") || p.contains("ra")) {
+        } else if (contem(p, "agenda", "aula", "horario", "calendario")) {
+            resposta = "Sua agenda com os horários de aulas e encontros presenciais ou online fica na aba 'Agenda'. Toque em um evento para adicioná-lo ao Google Agenda.";
+        } else if (contem(p, "carteira", "carteirinha") || temPalavra(p, "card", "ra")) {
             resposta = "Sua Carteira Digital de Estudante com seu RA fica disponível em 'Meu Card' na Home ou na aba 'Perfil'.";
-        } else if (p.contains("teste") || p.contains("vocacional") || p.contains("perfil")) {
+        } else if (contem(p, "teste", "vocacional", "riasec", "vocacao", "profissao")) {
             resposta = "Você pode responder ao Teste Vocacional RIASEC para descobrir sua vocação em 'Perfil' > 'Teste Vocacional'.";
         } else {
-            resposta = "Entendi sua dúvida sobre '" + pergunta + "'. Sou a IA assistente da Próxima Etapa! Como posso te auxiliar com seus estudos?";
+            resposta = "Entendi sua dúvida sobre '" + pergunta + "'. Sou a IA assistente da Próxima Etapa! Posso ajudar com cursos, agenda, presença, certificados, carteira e teste vocacional.";
         }
 
         exibirRespostaIa(resposta);

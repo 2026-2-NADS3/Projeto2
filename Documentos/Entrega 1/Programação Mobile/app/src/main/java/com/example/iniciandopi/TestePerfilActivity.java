@@ -1,6 +1,7 @@
 package com.example.iniciandopi;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,9 +22,9 @@ import retrofit2.Response;
 
 public class TestePerfilActivity extends AppCompatActivity {
 
-    public Button btnVoltarTeste, btnOpcaoA, btnOpcaoB, btnOpcaoC, btnProximaPergunta, btnVerCursosRecomendados;
+    public Button btnVoltarTeste, btnOpcaoA, btnOpcaoB, btnOpcaoC, btnProximaPergunta, btnVerCursosRecomendados, btnVoltarHome;
     public ProgressBar progressTeste;
-    public TextView txtContadorPergunta, txtPerguntaTitle, txtPerguntaSub, txtPerfilDetectado, txtDiagnosticoIa, txtCursosRecomendadosList;
+    public TextView txtContadorPergunta, txtPerguntaTitle, txtPerguntaSub, txtPerfilDetectado, txtDiagnosticoIa, txtCursosRecomendadosList, txtInicialTeste;
     public View cardPergunta, cardResultadoVocacional;
     public LinearLayout containerOpcoes;
 
@@ -45,7 +46,7 @@ public class TestePerfilActivity extends AppCompatActivity {
 
     private List<PerguntaVocacional> listaPerguntas;
     private int perguntaIndex = 0;
-    private int opcaoSelecionada = 1;
+    private int opcaoSelecionada = 0;
     private int scoreA = 0;
     private int scoreB = 0;
     private int scoreC = 0;
@@ -56,9 +57,14 @@ public class TestePerfilActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_teste_perfil);
 
+        int margem = (int) (24 * getResources().getDisplayMetrics().density); // 24dp em pixels
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(
+                    systemBars.left + margem,
+                    systemBars.top + margem,
+                    systemBars.right + margem,
+                    systemBars.bottom + margem);
             return insets;
         });
 
@@ -70,6 +76,7 @@ public class TestePerfilActivity extends AppCompatActivity {
         btnOpcaoC = findViewById(R.id.btnOpcaoC);
         btnProximaPergunta = findViewById(R.id.btnProximaPergunta);
         btnVerCursosRecomendados = findViewById(R.id.btnVerCursosRecomendados);
+        btnVoltarHome = findViewById(R.id.btnVoltarHome);
 
         progressTeste = findViewById(R.id.progressTeste);
         txtContadorPergunta = findViewById(R.id.txtContadorPergunta);
@@ -78,10 +85,13 @@ public class TestePerfilActivity extends AppCompatActivity {
         txtPerfilDetectado = findViewById(R.id.txtPerfilDetectado);
         txtDiagnosticoIa = findViewById(R.id.txtDiagnosticoIa);
         txtCursosRecomendadosList = findViewById(R.id.txtCursosRecomendadosList);
+        txtInicialTeste = findViewById(R.id.txtInicialTeste);
 
         cardPergunta = findViewById(R.id.cardPergunta);
         cardResultadoVocacional = findViewById(R.id.cardResultadoVocacional);
         containerOpcoes = findViewById(R.id.containerOpcoes);
+
+        carregarIniciaisAluno();
 
         if (btnVoltarTeste != null) {
             btnVoltarTeste.setOnClickListener(v -> {
@@ -115,7 +125,42 @@ public class TestePerfilActivity extends AppCompatActivity {
             });
         }
 
+        if (btnVoltarHome != null) {
+            btnVoltarHome.setOnClickListener(v -> irParaHome());
+        }
+
         atualizarTela();
+    }
+
+    // Galera aqui Lê o nome do aluno logado no banco e mostra as iniciais no avatar (ex.: "Luis Felipe" -> "LF").
+    private void carregarIniciaisAluno() {
+        if (txtInicialTeste == null) return;
+
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        Cursor cursor = dbHelper.obterAlunoLogado();
+        if (cursor == null) return;
+
+        if (cursor.moveToFirst()) {
+            int indexNome = cursor.getColumnIndex("nome");
+            if (indexNome != -1) {
+                String nome = cursor.getString(indexNome);
+                if (nome != null && !nome.trim().isEmpty()) {
+                    String[] partes = nome.trim().split(" ");
+                    String i1 = partes[0].substring(0, 1).toUpperCase();
+                    String i2 = partes.length > 1 && !partes[1].isEmpty() ? partes[1].substring(0, 1).toUpperCase() : "";
+                    txtInicialTeste.setText(i1 + i2);
+                }
+            }
+        }
+        cursor.close();
+    }
+
+    private void irParaHome() {
+        Intent intent = new Intent(TestePerfilActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+        finish();
     }
 
     private void inicializarPerguntas() {
@@ -192,6 +237,17 @@ public class TestePerfilActivity extends AppCompatActivity {
         ));
     }
 
+    private void limparSelecao() {
+        opcaoSelecionada = 0;
+        Button[] botoes = {btnOpcaoA, btnOpcaoB, btnOpcaoC};
+        for (Button b : botoes) {
+            if (b != null) {
+                b.setBackgroundResource(R.drawable.bg_option_unselected);
+                b.setTextColor(0xFF334155);
+            }
+        }
+    }
+
     private void selecionarOpcao(int opcao) {
         opcaoSelecionada = opcao;
 
@@ -212,6 +268,10 @@ public class TestePerfilActivity extends AppCompatActivity {
     }
 
     private void proximaPergunta() {
+        if (opcaoSelecionada == 0) {
+            Toast.makeText(this, "Escolha uma opção para continuar", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (opcaoSelecionada == 1) scoreA++;
         else if (opcaoSelecionada == 2) scoreB++;
         else if (opcaoSelecionada == 3) scoreC++;
@@ -301,9 +361,9 @@ public class TestePerfilActivity extends AppCompatActivity {
         if (btnOpcaoC != null) btnOpcaoC.setText(q.opcaoC);
 
         if (perguntaIndex == listaPerguntas.size() - 1 && btnProximaPergunta != null) {
-            btnProximaPergunta.setText("Finalizar e Ver Diagnóstico →");
+            btnProximaPergunta.setText("Finalizar e Ver Resultado →");
         }
 
-        selecionarOpcao(1);
+        limparSelecao();
     }
 }

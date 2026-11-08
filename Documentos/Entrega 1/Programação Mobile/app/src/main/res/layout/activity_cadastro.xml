@@ -15,9 +15,15 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:text="←"
+        android:contentDescription="Voltar"
         android:textColor="#0F172A"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:padding="0dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
         android:background="@drawable/bg_btn_flat"
         app:backgroundTint="@null"
         app:layout_constraintTop_toTopOf="parent"
@@ -40,30 +46,19 @@
             android:layout_height="wrap_content"
             android:paddingBottom="24dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/boxLogoCadastro"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+            <!-- Logo do app (arquivo: res/drawable/imglogo) -->
+            <ImageView
+                android:id="@+id/imgLogoCadastro"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/bg_logo_purple"
+                android:src="@drawable/imglogo"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:contentDescription="Logo Próxima Etapa"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <TextView
-                    android:id="@+id/txtLetraLogoCadastro"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="P"
-                    android:textColor="#FFFFFF"
-                    android:textSize="30sp"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
                 android:id="@+id/txtTituloCadastro"
@@ -74,7 +69,7 @@
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@id/boxLogoCadastro"
+                app:layout_constraintTop_toBottomOf="@id/imgLogoCadastro"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
