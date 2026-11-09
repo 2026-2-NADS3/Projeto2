@@ -18,8 +18,8 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     public Button btnInicio, btnCursos, btnAgenda, btnCertificados, btnPerfil, btnNotificacoes;
-    public View cardQrPresenca, cardMeuCard, cardAvatar;
-    public TextView txtOlaUsuario, txtInicialAvatar, txtMesBadge, txtDiaBadge, txtBadgeNotificacoes;
+    public View cardQrPresenca, cardMeuCard, cardAvatar, cardAgendaDestaque;
+    public TextView txtOlaUsuario, txtInicialAvatar, txtMesBadge, txtDiaBadge, txtBadgeNotificacoes, txtTituloEvento, txtDetalhesEvento;
     private DatabaseHelper dbHelper;
 
     @Override
@@ -46,12 +46,15 @@ public class MainActivity extends AppCompatActivity {
         cardQrPresenca = findViewById(R.id.cardQrPresenca);
         cardMeuCard = findViewById(R.id.cardMeuCard);
         cardAvatar = findViewById(R.id.cardAvatar);
+        cardAgendaDestaque = findViewById(R.id.cardAgendaDestaque);
 
         txtOlaUsuario = findViewById(R.id.txtOlaUsuario);
         txtInicialAvatar = findViewById(R.id.txtInicialAvatar);
         txtMesBadge = findViewById(R.id.txtMesBadge);
         txtDiaBadge = findViewById(R.id.txtDiaBadge);
         txtBadgeNotificacoes = findViewById(R.id.txtBadgeNotificacoes);
+        txtTituloEvento = findViewById(R.id.txtTituloEvento);
+        txtDetalhesEvento = findViewById(R.id.txtDetalhesEvento);
 
         carregarDadosAluno();
         carregarDataAgendaDestaque();
@@ -91,6 +94,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (cardMeuCard != null) {
             cardMeuCard.setOnClickListener(v -> irParaMeuCard());
+        }
+
+        if (cardAgendaDestaque != null) {
+            cardAgendaDestaque.setOnClickListener(v -> irParaAgenda());
         }
     }
 
@@ -154,6 +161,41 @@ public class MainActivity extends AppCompatActivity {
 
         if (txtDiaBadge != null) {
             txtDiaBadge.setText(dfDia.format(cal.getTime()));
+        }
+
+        String titulo = "Aula / Evento do Dia";
+        String detalhes = "Campus FECAP • 14:00";
+        String lab = "Lab 04 (FECAP)";
+
+        switch (cal.get(Calendar.DAY_OF_WEEK)) {
+            case Calendar.MONDAY:
+                titulo = "Aula 03: Lógica & Algoritmos";
+                detalhes = "14:00 - 16:00 • " + lab;
+                break;
+            case Calendar.TUESDAY:
+                titulo = "Oficina de Currículo";
+                detalhes = "14:00 - 15:30 • Sala 12 (FECAP)";
+                break;
+            case Calendar.WEDNESDAY:
+                titulo = "Visita Técnica FECAP";
+                detalhes = "14:00 - 16:30 • Campus Liberdade";
+                break;
+            case Calendar.THURSDAY:
+                titulo = "Aula 04: Comunicação Assertiva";
+                detalhes = "14:00 - 16:00 • " + lab;
+                break;
+            case Calendar.FRIDAY:
+            default:
+                titulo = "Workshop de Oratória";
+                detalhes = "14:00 - 16:00 • Auditório (FECAP)";
+                break;
+        }
+
+        if (txtTituloEvento != null) {
+            txtTituloEvento.setText(titulo);
+        }
+        if (txtDetalhesEvento != null) {
+            txtDetalhesEvento.setText(detalhes);
         }
     }
 

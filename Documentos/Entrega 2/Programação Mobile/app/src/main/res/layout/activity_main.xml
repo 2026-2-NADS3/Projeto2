@@ -383,6 +383,8 @@
                 android:layout_marginTop="12dp"
                 android:background="@drawable/bg_card_white"
                 android:padding="12dp"
+                android:clickable="true"
+                android:focusable="true"
                 app:layout_constraintTop_toBottomOf="@id/txtSecaoAgendaDestaque"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
