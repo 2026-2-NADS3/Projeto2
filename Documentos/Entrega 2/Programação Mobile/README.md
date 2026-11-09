@@ -3,6 +3,9 @@
 ## Integrantes
 - Julia Basílio
 - Luis Felipe Trindade
+- Davi Bigotto
+- Maria Eduarda
+
 
 ---
 
