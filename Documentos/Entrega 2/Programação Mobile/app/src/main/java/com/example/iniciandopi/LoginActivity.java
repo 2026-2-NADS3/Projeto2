@@ -1,10 +1,13 @@
 package com.example.iniciandopi;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.InputType;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
@@ -69,8 +72,54 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         if (txtEsqueceuSenha != null) {
-            txtEsqueceuSenha.setOnClickListener(v -> Toast.makeText(LoginActivity.this, "Recuperação de senha em breve!", Toast.LENGTH_SHORT).show());
+            txtEsqueceuSenha.setOnClickListener(v -> abrirRecuperacaoSenha());
         }
+    }
+
+    private void abrirRecuperacaoSenha() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("🔑 Recuperação de Senha");
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        int p = (int) (16 * getResources().getDisplayMetrics().density);
+        layout.setPadding(p, p, p, p);
+
+        final EditText edtEmailRecup = new EditText(this);
+        edtEmailRecup.setHint("Digite seu e-mail cadastrado");
+        edtEmailRecup.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        layout.addView(edtEmailRecup);
+
+        final EditText edtNovaSenha = new EditText(this);
+        edtNovaSenha.setHint("Digite a nova senha");
+        edtNovaSenha.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        layout.addView(edtNovaSenha);
+
+        builder.setView(layout);
+
+        builder.setPositiveButton("Redefinir Senha", (dialog, which) -> {
+            String email = edtEmailRecup.getText().toString().trim();
+            String novaSenha = edtNovaSenha.getText().toString().trim();
+
+            if (email.isEmpty() || novaSenha.isEmpty()) {
+                Toast.makeText(this, "Preencha todos os campos.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (dbHelper.emailJaCadastrado(email)) {
+                boolean atualizado = dbHelper.atualizarSenha(email, novaSenha);
+                if (atualizado) {
+                    Toast.makeText(this, "Senha redefinida com sucesso! Faça login com a nova senha.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "Erro ao atualizar a senha.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "E-mail não encontrado no banco de dados local.", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", null);
+        builder.show();
     }
 
     public void fazerLogin() {

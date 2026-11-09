@@ -135,6 +135,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return existe;
     }
 
+    public boolean atualizarSenha(String email, String novaSenha) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("senha", novaSenha);
+        int rows = db.update("usuarios", values, "email = ?", new String[]{email});
+        return rows > 0;
+    }
+
     public boolean cadastrarUsuario(String email, String senha, String nome, String ra, String escola) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
