@@ -11,7 +11,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-/** Tela inicial do ENEM: daqui o aluno escolhe a ferramenta que quer usar. */
 public class EnemActivity extends AppCompatActivity {
 
     public Button btnVoltarEnem;
@@ -26,7 +25,7 @@ public class EnemActivity extends AppCompatActivity {
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            int margem = (int) (24 * getResources().getDisplayMetrics().density); // 24dp em pixels
+            int margem = (int) (24 * getResources().getDisplayMetrics().density);
             v.setPadding(
                     systemBars.left + margem,
                     systemBars.top + margem,
@@ -51,7 +50,6 @@ public class EnemActivity extends AppCompatActivity {
             });
         }
 
-        // Por enquanto só mostram um aviso. Nos próximos passos cada um abre sua tela.
         if (cardEnemCalculadora != null) {
             cardEnemCalculadora.setOnClickListener(v -> avisarEmBreve("Calculadora de Nota de Corte"));
         }
@@ -65,7 +63,7 @@ public class EnemActivity extends AppCompatActivity {
         }
     }
 
-    /** Procura na lista de prazos o próximo dia de prova do Enem que ainda não passou. */
+
     private void carregarProximaProva() {
         if (txtEnemProximaProva == null || txtEnemPrazo == null) return;
 
@@ -78,7 +76,6 @@ public class EnemActivity extends AppCompatActivity {
             }
         }
 
-        // Se não sobrou nenhuma prova pela frente
         txtEnemProximaProva.setText("As provas do Enem 2026 já foram aplicadas");
         txtEnemPrazo.setText("Acompanhe os resultados no site do Inep");
     }

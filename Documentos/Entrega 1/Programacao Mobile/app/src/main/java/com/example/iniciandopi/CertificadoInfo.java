@@ -5,7 +5,6 @@ import android.database.Cursor;
 import java.text.Normalizer;
 import java.util.Locale;
 
-/** Dados de um certificado, passados entre as telas. */
 public class CertificadoInfo {
 
     public static final String EXTRA_ID = "cert_id";
@@ -15,8 +14,8 @@ public class CertificadoInfo {
 
     public final int id;
     public final String titulo;
-    public final String data;   // ex.: "15 Out 2026"
-    public final String horas;  // ex.: "40h"
+    public final String data;
+    public final String horas;
 
     public CertificadoInfo(int id, String titulo, String data, String horas) {
         this.id = id;
@@ -29,7 +28,6 @@ public class CertificadoInfo {
         return s == null || s.trim().isEmpty();
     }
 
-    /** Lê a linha atual do cursor da tabela certificados. */
     public static CertificadoInfo doCursor(Cursor c) {
         int iId = c.getColumnIndex("id");
         int iTitulo = c.getColumnIndex("titulo");
@@ -58,7 +56,6 @@ public class CertificadoInfo {
         intent.putExtra(EXTRA_HORAS, horas);
     }
 
-    /** "40h" -> "40 horas" */
     public String getHorasPorExtenso() {
         String numeros = horas.replaceAll("[^0-9]", "");
         return numeros.isEmpty() ? horas : numeros + " horas";
@@ -81,12 +78,10 @@ public class CertificadoInfo {
         return 10;
     }
 
-    /** Ex.: PE-2026-0001 */
     public String getCodigo() {
         return String.format(Locale.ROOT, "PE-%d-%04d", getAno(), id);
     }
 
-    /** Ex.: Certificado_Orientacao_Vocacional_Carreira.pdf */
     public String getNomeArquivo() {
         String semAcento = Normalizer.normalize(titulo, Normalizer.Form.NFD)
                 .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");

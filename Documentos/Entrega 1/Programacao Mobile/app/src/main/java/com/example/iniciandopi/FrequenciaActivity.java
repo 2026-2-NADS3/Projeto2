@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,9 @@ public class FrequenciaActivity extends AppCompatActivity {
     public Button btnVoltarFrequencia;
     public LinearLayout containerHistoricoPresencas;
     public TextView txtTotalPresencas;
+    public TextView txtTaxaFrequencia;
+    public ProgressBar progressFrequencia;
+    public TextView txtStatusFrequenciaSub;
     private DatabaseHelper dbHelper;
 
     @Override
@@ -36,6 +40,9 @@ public class FrequenciaActivity extends AppCompatActivity {
         btnVoltarFrequencia = findViewById(R.id.btnVoltarFrequencia);
         containerHistoricoPresencas = findViewById(R.id.containerHistoricoPresencas);
         txtTotalPresencas = findViewById(R.id.txtTotalPresencas);
+        txtTaxaFrequencia = findViewById(R.id.txtTaxaFrequencia);
+        progressFrequencia = findViewById(R.id.progressFrequencia);
+        txtStatusFrequenciaSub = findViewById(R.id.txtStatusFrequenciaSub);
 
         if (btnVoltarFrequencia != null) {
             btnVoltarFrequencia.setOnClickListener(v -> {
@@ -50,6 +57,7 @@ public class FrequenciaActivity extends AppCompatActivity {
     private void carregarHistoricoPresencas() {
         if (dbHelper == null || containerHistoricoPresencas == null) return;
 
+        containerHistoricoPresencas.removeAllViews();
         Cursor cursor = dbHelper.obterPresencas();
         int total = 0;
 
@@ -69,6 +77,27 @@ public class FrequenciaActivity extends AppCompatActivity {
 
         if (txtTotalPresencas != null) {
             txtTotalPresencas.setText(total + " Aulas");
+        }
+
+        int totalAulasEsperadas = 20;
+        int porcentagem = (int) Math.min(100, Math.round(((double) total / totalAulasEsperadas) * 100));
+
+        if (txtTaxaFrequencia != null) {
+            txtTaxaFrequencia.setText(porcentagem + "%");
+        }
+
+        if (progressFrequencia != null) {
+            progressFrequencia.setProgress(porcentagem);
+        }
+
+        if (txtStatusFrequenciaSub != null) {
+            if (porcentagem >= 75) {
+                int acima = porcentagem - 75;
+                txtStatusFrequenciaSub.setText("Sua frequência atual está " + acima + "% acima do mínimo para certificação.");
+            } else {
+                int abaixo = 75 - porcentagem;
+                txtStatusFrequenciaSub.setText("Sua frequência está " + abaixo + "% abaixo do mínimo exigido de 75%.");
+            }
         }
     }
 

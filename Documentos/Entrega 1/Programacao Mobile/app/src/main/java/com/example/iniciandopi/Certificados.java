@@ -84,7 +84,6 @@ public class Certificados extends AppCompatActivity {
         carregarCertificados();
     }
 
-    /** Lê os certificados do banco e preenche os dois cards da tela. */
     private void carregarCertificados() {
         List<CertificadoInfo> lista = new ArrayList<>();
         Cursor cursor = dbHelper.obterCertificadosLocais();

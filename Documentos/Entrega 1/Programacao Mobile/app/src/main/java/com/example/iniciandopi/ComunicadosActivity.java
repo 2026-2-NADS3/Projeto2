@@ -24,7 +24,6 @@ public class ComunicadosActivity extends AppCompatActivity {
     public TextView txtMarcarTodos;
     public LinearLayout containerAvisos;
 
-    /** A Home usa esta função para mostrar o número no sino. */
     public static int contarNaoLidos(Context ctx) {
         return PrazosRepositorio.contarNaoLidos(ctx);
     }
@@ -72,7 +71,6 @@ public class ComunicadosActivity extends AppCompatActivity {
         NotificacaoHelper.dispararNotificacao(this, "Próxima Etapa - Novo Aviso", "Abertura de inscrições para bolsas FIES 2026!");
     }
 
-    // ---------- Lista de avisos ----------
 
     private void recarregarAvisos() {
         if (containerAvisos == null) return;
@@ -104,7 +102,6 @@ public class ComunicadosActivity extends AppCompatActivity {
         card.setFocusable(true);
         if (prazo.encerrado()) card.setAlpha(0.55f);
 
-        // Linha de cima: categoria, "● NOVO" e prazo
         LinearLayout topo = new LinearLayout(this);
         topo.setOrientation(LinearLayout.HORIZONTAL);
         topo.setGravity(Gravity.CENTER_VERTICAL);
@@ -168,13 +165,11 @@ public class ComunicadosActivity extends AppCompatActivity {
         link.setPadding(0, dp(10), 0, 0);
         card.addView(link);
 
-        // Tocar no card: marca como lido
         card.setOnClickListener(v -> {
             PrazosRepositorio.marcarComoLido(this, prazo.id);
             recarregarAvisos();
         });
 
-        // Tocar no link: marca como lido e abre o site
         link.setOnClickListener(v -> {
             PrazosRepositorio.marcarComoLido(this, prazo.id);
             abrirSite(prazo.link);
@@ -192,7 +187,6 @@ public class ComunicadosActivity extends AppCompatActivity {
         }
     }
 
-    // ---------- Navegação ----------
 
     private void irParaHome() {
         Intent intent = new Intent(ComunicadosActivity.this, MainActivity.class);

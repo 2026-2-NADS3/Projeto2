@@ -51,7 +51,6 @@ public class BaixarPDF extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
-        // Certificado escolhido na tela anterior
         info = CertificadoInfo.doIntent(getIntent());
         TextView txtNomeArquivo = findViewById(R.id.txtNomeArquivoPdf);
         if (txtNomeArquivo != null) txtNomeArquivo.setText(info.getNomeArquivo());
@@ -86,9 +85,7 @@ public class BaixarPDF extends AppCompatActivity {
         }
     }
 
-    // ---------- Compartilhar: PDF no cache + FileProvider ----------
 
-    /** Gera o PDF na pasta de cache do app (so para compartilhar) e devolve o arquivo. */
     private File gerarPdfParaCompartilhar() throws IOException {
         File pasta = new File(getCacheDir(), "certificados");
         if (!pasta.exists() && !pasta.mkdirs()) throw new IOException("Sem pasta de cache");
@@ -107,7 +104,6 @@ public class BaixarPDF extends AppCompatActivity {
         return FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", arquivo);
     }
 
-    // ---------- WhatsApp (PDF anexado) ----------
 
     private void compartilharWhatsapp() {
         Uri uri;
@@ -125,7 +121,6 @@ public class BaixarPDF extends AppCompatActivity {
         intent.setClipData(ClipData.newRawUri("Certificado", uri));
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-        // Tenta o WhatsApp normal, depois o Business; se nenhum existir, abre o seletor do Android
         String[] pacotes = {"com.whatsapp", "com.whatsapp.w4b"};
         for (String pacote : pacotes) {
             try {
@@ -133,7 +128,6 @@ public class BaixarPDF extends AppCompatActivity {
                 startActivity(intent);
                 return;
             } catch (ActivityNotFoundException ignorado) {
-                // tenta o proximo
             }
         }
 
@@ -146,7 +140,6 @@ public class BaixarPDF extends AppCompatActivity {
         }
     }
 
-    // ---------- E-mail (PDF anexado) ----------
 
     private void compartilharEmail() {
         Uri uri;
@@ -158,7 +151,7 @@ public class BaixarPDF extends AppCompatActivity {
         }
 
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("message/rfc822"); // faz o Android mostrar só apps de e-mail
+        intent.setType("message/rfc822");
         intent.putExtra(Intent.EXTRA_SUBJECT, "Certificado - " + info.titulo + " | Próxima Etapa");
         intent.putExtra(Intent.EXTRA_TEXT,
                 "Olá!\n\nSegue em anexo o meu certificado de conclusão de " + info.titulo
@@ -174,9 +167,7 @@ public class BaixarPDF extends AppCompatActivity {
         }
     }
 
-    // ---------- LinkedIn ----------
 
-    /** Abre o formulário "Licenças e certificados" do LinkedIn já preenchido. */
     private void adicionarAoLinkedin() {
         String url = "https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME"
                 + "&name=" + Uri.encode(info.titulo)
@@ -192,7 +183,6 @@ public class BaixarPDF extends AppCompatActivity {
         }
     }
 
-    // ---------- Nome do aluno logado ----------
 
     private String obterNomeAluno() {
         String nome = "ALUNO";
@@ -212,7 +202,6 @@ public class BaixarPDF extends AppCompatActivity {
         return nome.toUpperCase();
     }
 
-    // ---------- Gera e salva o PDF ----------
 
     private void baixarCertificado() {
         PdfDocument documento = criarPdf(obterNomeAluno());
@@ -226,7 +215,6 @@ public class BaixarPDF extends AppCompatActivity {
         }
     }
 
-    /** Desenha o certificado em uma página A4 deitada (842 x 595 pontos). */
     private PdfDocument criarPdf(String nomeAluno) {
         PdfDocument documento = new PdfDocument();
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(842, 595, 1).create();
@@ -236,7 +224,6 @@ public class BaixarPDF extends AppCompatActivity {
         int largura = pageInfo.getPageWidth();
         float centro = largura / 2f;
 
-        // Borda roxa
         Paint borda = new Paint(Paint.ANTI_ALIAS_FLAG);
         borda.setStyle(Paint.Style.STROKE);
         borda.setStrokeWidth(6);
@@ -288,12 +275,10 @@ public class BaixarPDF extends AppCompatActivity {
         return documento;
     }
 
-    /** Salva o PDF e devolve um texto dizendo onde ficou. */
     private String salvarPdf(PdfDocument documento) throws IOException {
         String nomeArquivo = info.getNomeArquivo();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            // Android 10+: vai direto para a pasta Downloads, sem pedir permissão
             ContentValues valores = new ContentValues();
             valores.put(MediaStore.Downloads.DISPLAY_NAME, nomeArquivo);
             valores.put(MediaStore.Downloads.MIME_TYPE, "application/pdf");
@@ -309,7 +294,6 @@ public class BaixarPDF extends AppCompatActivity {
             }
             return "Downloads";
         } else {
-            // Android 9 ou menor: salva na pasta do próprio app
             File pasta = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
             if (pasta == null) throw new IOException("Sem armazenamento");
             File arquivo = new File(pasta, nomeArquivo);

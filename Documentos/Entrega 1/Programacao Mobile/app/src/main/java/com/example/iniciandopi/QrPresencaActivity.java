@@ -26,7 +26,6 @@ public class QrPresencaActivity extends AppCompatActivity {
     public TextView txtNomeAulaDetectada, txtProfAulaDetectada;
     private DatabaseHelper dbHelper;
 
-    // Guarda o que foi lido no QR. Fica null enquanto nada foi lido.
     private String aulaLida = null;
 
     @Override
@@ -74,9 +73,7 @@ public class QrPresencaActivity extends AppCompatActivity {
         integrator.initiateScan();
     }
 
-    /** Salva a presença no SQLite, com data real e sem duplicar. */
     private void confirmarPresenca() {
-        // 1) Só confirma se um QR já foi lido
         if (aulaLida == null) {
             Toast.makeText(this, "Leia o QR Code da aula antes de confirmar.", Toast.LENGTH_LONG).show();
             return;
@@ -86,13 +83,11 @@ public class QrPresencaActivity extends AppCompatActivity {
         String dia = new SimpleDateFormat("dd/MM/yyyy", PT_BR).format(agora);
         String dataHora = new SimpleDateFormat("dd/MM/yyyy 'às' HH:mm", PT_BR).format(agora);
 
-        // 2) Evita presença duplicada para a mesma aula no mesmo dia
         if (dbHelper.existePresenca(aulaLida, dia)) {
             Toast.makeText(this, "Sua presença nesta aula já foi registrada hoje.", Toast.LENGTH_LONG).show();
             return;
         }
 
-        // 3) Salva com a data e hora reais
         boolean salvou = dbHelper.salvarPresencaLocal(aulaLida, dataHora);
         if (salvou) {
             Toast.makeText(this, "Presença confirmada e salva no SQLite local!", Toast.LENGTH_LONG).show();

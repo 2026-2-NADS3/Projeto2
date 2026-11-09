@@ -29,15 +29,12 @@ public class CursosActivity extends AppCompatActivity {
     public Button btnFiltroTodos, btnFiltroInscritos, btnInscreverCurso4;
     public EditText edtBuscarCursos;
 
-    // Listas paralelas: posição 0 = curso 1, posição 1 = curso 2, ...
     private View[] cards;
     private TextView[] nomes;
     private TextView[] descricoes;
 
-    // Mensagem exibida quando nenhum curso passa pelo filtro
     private TextView txtNenhumCurso;
 
-    // Cursos 1, 2 e 3 já são do aluno. O 4 depende do botão "Inscrever-se".
     private final boolean[] inscrito = {true, true, true, false, false, false};
     private boolean apenasInscritos = false;
 
@@ -80,7 +77,6 @@ public class CursosActivity extends AppCompatActivity {
 
         criarMensagemNenhumCurso();
 
-        // Recupera se o aluno já se inscreveu no módulo 4 antes
         SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
         inscrito[3] = prefs.getBoolean(KEY_INSCRITO_4, false);
         if (inscrito[3]) {
@@ -101,7 +97,6 @@ public class CursosActivity extends AppCompatActivity {
 
         btnInscreverCurso4.setOnClickListener(v -> realizarInscricaoCurso4());
 
-        // Busca: toda vez que o texto muda, refaz o filtro
         edtBuscarCursos.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) { }
             @Override public void onTextChanged(CharSequence s, int st, int b, int c) { }
@@ -113,7 +108,7 @@ public class CursosActivity extends AppCompatActivity {
         aplicarFiltros();
     }
 
-    /** Cria o texto "Nenhum curso encontrado" e coloca no topo da lista de cursos. */
+
     private void criarMensagemNenhumCurso() {
         txtNenhumCurso = new TextView(this);
         txtNenhumCurso.setText("Nenhum curso encontrado");
@@ -130,7 +125,7 @@ public class CursosActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT));
     }
 
-    /** Decide quais cards aparecem, combinando busca + filtro Todos/Inscritos. */
+
     private void aplicarFiltros() {
         String busca = normalizar(edtBuscarCursos.getText().toString());
         int visiveis = 0;
@@ -146,11 +141,10 @@ public class CursosActivity extends AppCompatActivity {
             if (mostrar) visiveis++;
         }
 
-        // Se nenhum card ficou visível, mostra a mensagem
         txtNenhumCurso.setVisibility(visiveis == 0 ? View.VISIBLE : View.GONE);
     }
 
-    /** Tira acentos e deixa minúsculo: "Liderança" vira "lideranca". */
+
     private String normalizar(String texto) {
         return Normalizer.normalize(texto, Normalizer.Form.NFD)
                 .replaceAll("\\p{M}", "")

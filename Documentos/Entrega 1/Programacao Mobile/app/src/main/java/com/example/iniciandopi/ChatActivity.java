@@ -111,7 +111,6 @@ public class ChatActivity extends AppCompatActivity {
             scrollChat.post(() -> scrollChat.fullScroll(ScrollView.FOCUS_DOWN));
         }
 
-        // Tenta enviar para a Edge Function de IA no Supabase via Retrofit
         consultarIaRetrofit(texto);
     }
 
@@ -141,16 +140,13 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    // ---------- Respostas automáticas (usadas quando a API não responde) ----------
 
-    /** Tira acentos e deixa minúsculo: "Presença" vira "presenca". */
     private String normalizar(String texto) {
         return Normalizer.normalize(texto, Normalizer.Form.NFD)
                 .replaceAll("\\p{M}", "")
                 .toLowerCase(Locale.ROOT);
     }
 
-    /** Vale se o texto contém qualquer um dos pedaços (serve para palavras longas). */
     private boolean contem(String texto, String... pedacos) {
         for (String p : pedacos) {
             if (texto.contains(p)) return true;
@@ -158,7 +154,6 @@ public class ChatActivity extends AppCompatActivity {
         return false;
     }
 
-    /** Vale só se for a palavra inteira (serve para palavras curtas como "ra" e "qr"). */
     private boolean temPalavra(String texto, String... palavras) {
         for (String p : palavras) {
             if (Pattern.compile("\\b" + Pattern.quote(p) + "\\b").matcher(texto).find()) {

@@ -23,7 +23,6 @@ public class Agenda extends AppCompatActivity {
 
     private static final Locale PT_BR = Locale.forLanguageTag("pt-BR");
 
-    /** Guarda os dados de um evento da agenda. */
     private static class Evento {
         final String titulo;
         final int horaInicio, minInicio, horaFim, minFim;
@@ -110,7 +109,6 @@ public class Agenda extends AppCompatActivity {
             cardsDia[i].setOnClickListener(v -> selecionarDia(indice));
         }
 
-        // Tocar em um evento abre o Google Agenda com os dados preenchidos
         cardEvent1.setOnClickListener(v -> adicionarAoGoogleAgenda(eventosAtuais[0]));
         cardEvent2.setOnClickListener(v -> adicionarAoGoogleAgenda(eventosAtuais[1]));
 
@@ -118,7 +116,6 @@ public class Agenda extends AppCompatActivity {
         configurarMenu();
     }
 
-    // ---------- Datas: só dias úteis ----------
 
     private void pularFimDeSemana(Calendar cal) {
         while (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY
@@ -152,7 +149,6 @@ public class Agenda extends AppCompatActivity {
         }
     }
 
-    // ---------- Seleção do dia ----------
 
     private void selecionarDia(int indice) {
         diaSelecionado = indice;
@@ -178,7 +174,6 @@ public class Agenda extends AppCompatActivity {
         txtLabelHoje.setText(ehHoje ? "HOJE (" + texto + ")" : texto);
     }
 
-    // ---------- Eventos de cada dia da semana (exemplos) ----------
 
     private Evento[] eventosDoDia(int diaDaSemana) {
         String lab = "Lab 04 (FECAP)";
@@ -201,7 +196,7 @@ public class Agenda extends AppCompatActivity {
                 return new Evento[]{
                         new Evento("Aula 04: Comunicação Assertiva", 14, 0, 16, 0, lab),
                         new Evento("Mentoria em Grupo", 16, 30, 17, 30, meet)};
-            default: // sexta
+            default:
                 return new Evento[]{
                         new Evento("Workshop de Oratória", 14, 0, 16, 0, "Auditório (FECAP)"),
                         new Evento("Revisão da Semana", 16, 30, 17, 0, meet)};
@@ -218,9 +213,7 @@ public class Agenda extends AppCompatActivity {
         txtDetEvento2.setText(eventosAtuais[1].detalhe() + dica);
     }
 
-    // ---------- Integração com o Google Agenda ----------
 
-    /** Monta o horário (início ou fim) do evento no dia selecionado, em milissegundos. */
     private long horarioEmMillis(Evento e, boolean inicio) {
         Calendar c = (Calendar) dias[diaSelecionado].clone();
         c.set(Calendar.HOUR_OF_DAY, inicio ? e.horaInicio : e.horaFim);
@@ -236,7 +229,6 @@ public class Agenda extends AppCompatActivity {
         long inicio = horarioEmMillis(e, true);
         long fim = horarioEmMillis(e, false);
 
-        // Aqui galera abre o app de calendário do celular já com tudo preenchido
         Intent intent = new Intent(Intent.ACTION_INSERT)
                 .setData(CalendarContract.Events.CONTENT_URI)
                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, inicio)
@@ -248,7 +240,6 @@ public class Agenda extends AppCompatActivity {
         try {
             startActivity(intent);
         } catch (ActivityNotFoundException ex) {
-            // CASO O CELULAR NÃO TENHA O APP: abre o Google Agenda no navegador
             abrirNoNavegador(e, inicio, fim);
         }
     }
@@ -268,7 +259,6 @@ public class Agenda extends AppCompatActivity {
         }
     }
 
-    // ---------- Menu inferior ----------
 
     private void configurarMenu() {
         if (btnInicio != null) {
