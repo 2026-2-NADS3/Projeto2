@@ -1,0 +1,25 @@
+RELATORIO DE TESTE DE CARGA - Proxima Etapa
+Data: 08/11/2026 16:57
+Alvo: GET https://jzaageilkvvucgedlwxr.supabase.co/rest/v1/courses
+Chave anon: demo (servidor deve responder 401)
+
+Etapa: 5 usuarios simultaneos, 50 requisicoes
+  Duracao total: 6.97 s | Vazao: 7.2 req/s
+  Tempo medio: 561 ms | minimo: 69 ms | maximo: 2385 ms
+  p50: 241 ms | p95: 2370 ms
+  Taxa de resposta do servidor: 98.0%
+  Status: falha de rede: 1, 401 nao autorizado: 49
+
+Etapa: 10 usuarios simultaneos, 100 requisicoes
+  Duracao total: 1.40 s | Vazao: 71.3 req/s
+  Tempo medio: 120 ms | minimo: 54 ms | maximo: 409 ms
+  p50: 79 ms | p95: 356 ms
+  Taxa de resposta do servidor: 100.0%
+  Status: 401 nao autorizado: 100
+
+Etapa: 25 usuarios simultaneos, 250 requisicoes
+  Duracao total: 2.17 s | Vazao: 115.1 req/s
+  Tempo medio: 151 ms | minimo: 64 ms | maximo: 753 ms
+  p50: 104 ms | p95: 512 ms
+  Taxa de resposta do servidor: 100.0%
+  Status: 401 nao autorizado: 250
